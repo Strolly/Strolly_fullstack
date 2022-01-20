@@ -8,11 +8,11 @@ function App() {
     const [newComment, setNewComment] = useState<string>('');
 
     useEffect(() => {
-        axios
-            .get('http://localhost:8000/api/view/') // sending data to backend
+        axios // Localhost: http://localhost:8000/api/view/
+            .get('https://gib-2-project.herokuapp.com/api/view/') // sending data to backend
             .then((response) => {
                 setComments(response.data);
-                //console.log(response.data);
+                console.log(response.data);
             })
             .catch((error) => {
                 console.log(error);
@@ -21,8 +21,8 @@ function App() {
 
     const addComment = () => {
         if (newComment) {
-            axios
-                .post('http://localhost:8000/api/create/', {
+            axios //Localhost: http://localhost:8000/api/create/
+                .post('https://gib-2-project.herokuapp.com/api/create/', {
                     name: newComment, //sending data to backend
                     description: 'This is comment number ' + comments.length,
                 }) // sending data to backend
