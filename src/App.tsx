@@ -30,7 +30,7 @@ function App() {
             axios //Localhost: http://localhost:8000/api/create/
                 .post('https://gib-2-project.herokuapp.com/api/create/', {
                     name: newComment, //sending data to backend
-                    description: 'This is comment number ' + comments.length,
+                    description: 'This is a test from nils ' + comments.length,
                 }) // sending data to backend
                 .then((response) => {
                     console.log(response.data); // view the response
