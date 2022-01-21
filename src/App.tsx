@@ -3,6 +3,12 @@ import axios from 'axios';
 import logo from './logo.svg';
 import './App.css';
 
+interface Comment {
+    id?: string;
+    name: string;
+    description: string;
+}
+
 function App() {
     const [comments, setComments] = useState<Comment[]>([]);
     const [newComment, setNewComment] = useState<string>('');
@@ -33,10 +39,10 @@ function App() {
                     console.log(error); // check if any error
                 });
         }
-    }
-  return (
-    <div className="App">
-      <header className="App-header">
+    };
+    return (
+        <div className="App">
+            <header className="App-header">
                 <img src={logo} className="App-logo" alt="logo" />
                 <p>
                     Edit <code>src/App.tsx</code> and save to reload.
@@ -51,8 +57,8 @@ function App() {
                 />
                 <button onClick={addComment}>Submit</button>
             </header>
-    </div>
-  );
+        </div>
+    );
 }
 
 export default App;
