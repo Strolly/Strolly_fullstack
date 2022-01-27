@@ -1,7 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react';
-import Button from '../components/Button';
-import Typography from '@mui/material/Typography';
-import MapViewLayout from './MapViewLayout';
 import Box from '@mui/material/Box';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
