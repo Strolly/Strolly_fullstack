@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Button from '../components/Button';
 import Typography from '@mui/material/Typography';
 import MapViewLayout from './MapViewLayout';
@@ -14,7 +14,7 @@ const backgroundImage =
 
 export default function MapView() {
     const mapContainer = useRef<HTMLDivElement>(null);
-    let [map, setMap] = useState(null);
+    const [map, setMap] = useState(null);
     const [lng, setLng] = useState(10.421906);
     const [lat, setLat] = useState(63.446827);
     const [zoom, setZoom] = useState(12);
