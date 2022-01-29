@@ -1,11 +1,12 @@
 from rest_framework import serializers
-from .models import StrollingPath
+from .models import Path_geom, User
 
-class StrollingPathSerializer(serializers.ModelSerializer):
+class UserSerializer(serializers.ModelSerializer):
     class Meta:
-        fields =(
-            'id',
-            'name',
-            'description',
-        )
-        model = StrollingPath
+        model = User
+        fields = '__all__'
+
+class Path_geomSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Path_geom
+        fields = '__all__'
