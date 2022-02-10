@@ -13,4 +13,4 @@ class User(viewsets.ModelViewSet):
 
 class Path_geom(viewsets.ModelViewSet):
     queryset=Path_geom.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = Path_geomSerializer
