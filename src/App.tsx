@@ -3,22 +3,26 @@ import axios from 'axios';
 import logo from './logo.svg';
 import './App.css';
 import Home from './pages/Home';
+import { request_url } from './constants/config';
 
-interface Comment {
+interface User {
     id?: string;
     name: string;
-    description: string;
+    age: Int16Array;
 }
 
 function App() {
-    const [comments, setComments] = useState<Comment[]>([]);
-    const [newComment, setNewComment] = useState<string>('');
+    const [user, setUser] = useState<Comment[]>([]);
+    const [path, setPath] = useState<string>('');
+
+    const user_request = request_url.url.API_URL_USER; //localhost:8000/api/user/
+    const path_geom_request = request_url.url.API_URL_PATH_GEOM; //localhost:8000/api/path_geom
 
     useEffect(() => {
-        axios // Localhost: http://localhost:8000/api/view/
-            .get('https://gib-2-project.herokuapp.com/api/view/') // sending data to backend
+        axios
+            .get(user_request) // getting data from backend
             .then((response) => {
-                setComments(response.data);
+                setUser(response.data);
                 console.log(response.data);
             })
             .catch((error) => {
@@ -26,22 +30,6 @@ function App() {
             });
     }, []);
 
-    const addComment = () => {
-        if (newComment) {
-            axios //Localhost: http://localhost:8000/api/create/
-                .post('https://gib-2-project.herokuapp.com/api/create/', {
-                    name: newComment, //sending data to backend
-                    description: 'This is a test from evenius  ' + comments.length,
-                }) // sending data to backend
-                .then((response) => {
-                    console.log(response.data); // view the response
-                    console.log('nils tester');
-                })
-                .catch((error) => {
-                    console.log(error); // check if any error
-                });
-        }
-    };
     return (
         <div className="App">
             <Home />
