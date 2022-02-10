@@ -35,6 +35,7 @@ function App() {
                 }) // sending data to backend
                 .then((response) => {
                     console.log(response.data); // view the response
+                    console.log('nils tester');
                 })
                 .catch((error) => {
                     console.log(error); // check if any error
