@@ -4,12 +4,21 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import { styled } from '@mui/material/styles';
 import MuiToolbar from '@mui/material/Toolbar';
+import FacebookLogin from 'react-facebook-login';
+import axios from 'axios';
 
-const rightLink = {
-    fontSize: 16,
-    color: 'common.white',
-    ml: 3,
-};
+interface FacebookResponse {
+    accessToken: string;
+    data_access_expiration_time: number;
+    email: string;
+    expiresIn: number;
+    graphDomain: string;
+    id: string;
+    name: string;
+    picture: any;
+    signedRequest: string;
+    userID: string;
+}
 
 const Toolbar = styled(MuiToolbar)(({ theme }) => ({
     height: 64,
@@ -17,6 +26,26 @@ const Toolbar = styled(MuiToolbar)(({ theme }) => ({
         height: 70,
     },
 }));
+
+const responseFacebook = (response: FacebookResponse) => {
+    axios
+        .post('http://127.0.0.1:8000/auth/convert-token', {
+            token: response.accessToken,
+            backend: 'facebook',
+            grant_type: 'convert_token',
+            client_id: 'G3QCtsyqbWv2AFSMkBkTpNvLIArBt2BTvUqBA1Lz',
+            client_secret:
+                'trPmjTOTKEOpYjVPwkKxUnh7Rq1mrvb2aTOjyHB7gFok3iZV1c6EDFNvhPp3UiRaNEblEUeCGltRnCksc3XvTHPfykCcfHZhZirnOTDQaeWirtKGZC4CKJhC5CSpAmVl',
+        })
+        .then((res) => {
+            localStorage.setItem('access_token', res.data.access_token);
+            localStorage.setItem('refresh_token', res.data.refresh_token);
+        });
+};
+
+const componentClicked = () => {
+    console.log('hei');
+};
 
 function AppBar(props: AppBarProps) {
     return (
@@ -31,26 +60,16 @@ function AppBar(props: AppBarProps) {
                         href="/premium-themes/onepirate/"
                         sx={{ fontSize: 24 }}
                     >
-                        {'Stroll'}
+                        {'Strolly'}
                     </Link>
                     <Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
-                        <Link
-                            color="inherit"
-                            variant="h6"
-                            underline="none"
-                            href="/premium-themes/onepirate/sign-in/"
-                            sx={rightLink}
-                        >
-                            {'Sign In'}
-                        </Link>
-                        <Link
-                            variant="h6"
-                            underline="none"
-                            href="/premium-themes/onepirate/sign-up/"
-                            sx={{ ...rightLink, color: 'secondary.main' }}
-                        >
-                            {'Sign Up'}
-                        </Link>
+                        <FacebookLogin
+                            appId="4890883034293415"
+                            autoLoad={true}
+                            fields="name,email,picture"
+                            onClick={componentClicked}
+                            callback={responseFacebook}
+                        />
                     </Box>
                 </Toolbar>
             </MuiAppBar>
