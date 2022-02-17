@@ -107,10 +107,7 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-try:
-    from .local_settings import *
-except ImportError:
-    pass
+
 
 LOGIN_URL = 'login'
 LOGOUT_URL = 'logout'
@@ -180,3 +177,8 @@ django_heroku.settings(locals())
 # Production
 SOCIAL_AUTH_FACEBOOK_KEY = '4554233111370018'  # App ID
 SOCIAL_AUTH_FACEBOOK_SECRET = '3d6191526537b18b63a6cb3109915c6a'  # App Secret
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass

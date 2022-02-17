@@ -6,6 +6,7 @@ import { styled } from '@mui/material/styles';
 import MuiToolbar from '@mui/material/Toolbar';
 import FacebookLogin from 'react-facebook-login';
 import axios from 'axios';
+import { request_url } from '../constants/config';
 
 interface FacebookResponse {
     accessToken: string;
@@ -28,15 +29,15 @@ const Toolbar = styled(MuiToolbar)(({ theme }) => ({
 }));
 
 const responseFacebook = (response: FacebookResponse) => {
+    console.log('app_id:', request_url.url.SOCIAL_AUTH_FACEBOOK_KEY);
     console.log(response);
     axios
         .post('http://127.0.0.1:8000/auth/convert-token', {
             token: response.accessToken,
             backend: 'facebook',
             grant_type: 'convert_token',
-            client_id: 'G3QCtsyqbWv2AFSMkBkTpNvLIArBt2BTvUqBA1Lz',
-            client_secret:
-                'trPmjTOTKEOpYjVPwkKxUnh7Rq1mrvb2aTOjyHB7gFok3iZV1c6EDFNvhPp3UiRaNEblEUeCGltRnCksc3XvTHPfykCcfHZhZirnOTDQaeWirtKGZC4CKJhC5CSpAmVl',
+            client_id: request_url.url.CLIENT_ID,
+            client_secret: request_url.url.CLIENT_SECRET,
         })
         .then((res) => {
             console.log(res);
@@ -48,7 +49,6 @@ const responseFacebook = (response: FacebookResponse) => {
 const componentClicked = () => {
     console.log('hei');
 };
-
 function AppBar(props: AppBarProps) {
     return (
         <div>
@@ -66,7 +66,7 @@ function AppBar(props: AppBarProps) {
                     </Link>
                     <Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
                         <FacebookLogin
-                            appId="4554233111370018"
+                            appId={request_url.url.SOCIAL_AUTH_FACEBOOK_KEY}
                             autoLoad={true}
                             fields="name,email,picture"
                             onClick={componentClicked}
