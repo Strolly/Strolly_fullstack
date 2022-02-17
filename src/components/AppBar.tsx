@@ -66,7 +66,7 @@ function AppBar(props: AppBarProps) {
                     </Link>
                     <Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
                         <FacebookLogin
-                            appId="4890883034293415"
+                            appId="4554233111370018"
                             autoLoad={true}
                             fields="name,email,picture"
                             onClick={componentClicked}
