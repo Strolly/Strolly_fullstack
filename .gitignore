@@ -22,7 +22,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# Environmental cofnig variable
+# Environmental config variable
 .env
 
 # backend
