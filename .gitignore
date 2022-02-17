@@ -24,7 +24,6 @@ yarn-error.log*
 
 # Environmental config variable
 
-.env
 
 # backend
 /myproject/local_settings.py
