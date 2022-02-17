@@ -28,6 +28,7 @@ const Toolbar = styled(MuiToolbar)(({ theme }) => ({
 }));
 
 const responseFacebook = (response: FacebookResponse) => {
+    console.log(response);
     axios
         .post('http://127.0.0.1:8000/auth/convert-token', {
             token: response.accessToken,
@@ -38,6 +39,7 @@ const responseFacebook = (response: FacebookResponse) => {
                 'trPmjTOTKEOpYjVPwkKxUnh7Rq1mrvb2aTOjyHB7gFok3iZV1c6EDFNvhPp3UiRaNEblEUeCGltRnCksc3XvTHPfykCcfHZhZirnOTDQaeWirtKGZC4CKJhC5CSpAmVl',
         })
         .then((res) => {
+            console.log(res);
             localStorage.setItem('access_token', res.data.access_token);
             localStorage.setItem('refresh_token', res.data.refresh_token);
         });
