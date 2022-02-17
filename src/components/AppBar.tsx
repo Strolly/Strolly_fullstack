@@ -30,9 +30,10 @@ const Toolbar = styled(MuiToolbar)(({ theme }) => ({
 
 const responseFacebook = (response: FacebookResponse) => {
     console.log('app_id:', request_url.url.SOCIAL_AUTH_FACEBOOK_KEY);
+    console.log('convert token url: request_url.url.API_CONVERT_TOKEN');
     console.log(response);
     axios
-        .post('http://127.0.0.1:8000/auth/convert-token', {
+        .post(request_url.url.API_CONVERT_TOKEN, {
             token: response.accessToken,
             backend: 'facebook',
             grant_type: 'convert_token',

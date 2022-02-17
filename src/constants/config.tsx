@@ -7,6 +7,7 @@ const prod = {
         CLIENT_ID: 'G3QCtsyqbWv2AFSMkBkTpNvLIArBt2BTvUqBA1Lz',
         CLIENT_SECRET:
             'trPmjTOTKEOpYjVPwkKxUnh7Rq1mrvb2aTOjyHB7gFok3iZV1c6EDFNvhPp3UiRaNEblEUeCGltRnCksc3XvTHPfykCcfHZhZirnOTDQaeWirtKGZC4CKJhC5CSpAmVl',
+        API_CONVERT_TOKEN: 'https://gib-2-project.herokuapp.com/auth/convert-token',
     },
 };
 
@@ -19,6 +20,7 @@ const local = {
         CLIENT_ID: 'G3QCtsyqbWv2AFSMkBkTpNvLIArBt2BTvUqBA1Lz',
         CLIENT_SECRET:
             'trPmjTOTKEOpYjVPwkKxUnh7Rq1mrvb2aTOjyHB7gFok3iZV1c6EDFNvhPp3UiRaNEblEUeCGltRnCksc3XvTHPfykCcfHZhZirnOTDQaeWirtKGZC4CKJhC5CSpAmVl',
+        API_CONVERT_TOKEN: 'http://127.0.0.1:8000/auth/convert-token',
     },
 };
 
