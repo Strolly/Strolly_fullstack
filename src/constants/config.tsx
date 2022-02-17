@@ -4,9 +4,9 @@ const prod = {
         API_URL_PATH_GEOM: 'https://gib-2-project.herokuapp.com/api/path_geom',
         SOCIAL_AUTH_FACEBOOK_KEY: '4554233111370018',
         SOCIAL_AUTH_FACEBOOK_SECRET: '3d6191526537b18b63a6cb3109915c6a',
-        CLIENT_ID: 'G3QCtsyqbWv2AFSMkBkTpNvLIArBt2BTvUqBA1Lz',
+        CLIENT_ID: 'cKyuK5Y36dtA2Aku8sSFkZuKUf1BQUMNTIpQ4hrR',
         CLIENT_SECRET:
-            'trPmjTOTKEOpYjVPwkKxUnh7Rq1mrvb2aTOjyHB7gFok3iZV1c6EDFNvhPp3UiRaNEblEUeCGltRnCksc3XvTHPfykCcfHZhZirnOTDQaeWirtKGZC4CKJhC5CSpAmVl',
+            'KmDjEhoTMQI5cn3bZ907Z1U0HUr8Rhx3TvtQbDAkBc4Xykfkg2XBY5RWJieZ81UPsjDdKWKLhUe15R2UoGOxTX884LhRN2VL7Ylzp1F5lDEZsF18VSqv8Aek3K5JtBrs',
         API_CONVERT_TOKEN: 'https://gib-2-project.herokuapp.com/auth/convert-token',
     },
 };
