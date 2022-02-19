@@ -37,7 +37,7 @@ export default function MapView() {
     }, [map]);
 
     return (
-        <Box width={1} sx={{ mt: 3 }}>
+        <Box width={1} sx={{ mt: 3 }} style={{ marginTop: '0px' }}>
             <div
                 id="comparison-container"
                 style={{
