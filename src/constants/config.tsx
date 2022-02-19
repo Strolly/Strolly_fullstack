@@ -2,8 +2,8 @@ const prod = {
     url: {
         API_URL_USER: 'https://gib-2-project.herokuapp.com/api/user',
         API_URL_PATH_GEOM: 'https://gib-2-project.herokuapp.com/api/path_geom',
-        SOCIAL_AUTH_FACEBOOK_KEY: '4554233111370018',
-        SOCIAL_AUTH_FACEBOOK_SECRET: '3d6191526537b18b63a6cb3109915c6a',
+        SOCIAL_AUTH_FACEBOOK_KEY: '618576985900653',
+        SOCIAL_AUTH_FACEBOOK_SECRET: '54b747c274544c888634fa8c4b7013f9',
         CLIENT_ID: 'cKyuK5Y36dtA2Aku8sSFkZuKUf1BQUMNTIpQ4hrR',
         CLIENT_SECRET:
             'KmDjEhoTMQI5cn3bZ907Z1U0HUr8Rhx3TvtQbDAkBc4Xykfkg2XBY5RWJieZ81UPsjDdKWKLhUe15R2UoGOxTX884LhRN2VL7Ylzp1F5lDEZsF18VSqv8Aek3K5JtBrs',
