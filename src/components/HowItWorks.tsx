@@ -21,11 +21,6 @@ const number = {
     fontWeight: 'medium',
 };
 
-const image = {
-    height: 55,
-    my: 4,
-};
-
 function ProductHowItWorks() {
     return (
         <Box component="section" sx={{ display: 'flex', bgcolor: 'secondary.light', overflow: 'hidden' }}>
