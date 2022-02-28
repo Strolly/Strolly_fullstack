@@ -36,7 +36,8 @@ function ProtectedHome() {
 
     useEffect(() => {
         const attachMap = (
-            setMap: React.Dispatch<React.SetStateAction<any>>,
+            //setMap: React.Dispatch<React.SetStateAction<any>>,
+            setMap: (value: any | null) => void,
             mapContainer: React.RefObject<HTMLDivElement>,
         ) => {
             if (!mapContainer.current) {

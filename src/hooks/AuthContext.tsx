@@ -6,7 +6,8 @@ export type AuthToken = {
 
 interface AuthContextType {
     token: AuthToken | null;
-    setToken: React.Dispatch<React.SetStateAction<AuthToken | null>>;
+    setToken: (value: AuthToken | null) => void;
+    //setToken: React.Dispatch<React.SetStateAction<AuthToken | null>>;
 }
 
 type AuthContextProviderProps = {
