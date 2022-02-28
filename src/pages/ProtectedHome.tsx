@@ -23,7 +23,7 @@ function ProtectedHome() {
 
     const checkStorage = (token: AuthToken | null) => {
         if (token == null) {
-            let token = sessionStorage.getItem('access_token');
+            const token = sessionStorage.getItem('access_token');
             setIsAuth(token);
         } else {
             setIsAuth(token);
