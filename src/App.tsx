@@ -2,8 +2,11 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import logo from './logo.svg';
 import './App.css';
-import Home from './pages/Home';
+import HomePage from './pages/Home';
 import { request_url } from './constants/config';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import ProfilePage from './pages/Profile';
+
 
 interface User {
     id?: string;
@@ -14,7 +17,6 @@ interface User {
 function App() {
     const [user, setUser] = useState<Comment[]>([]);
     const [path, setPath] = useState<string>('');
-
     const user_request = request_url.url.API_URL_USER; //localhost:8000/api/user/
     const path_geom_request = request_url.url.API_URL_PATH_GEOM; //localhost:8000/api/path_geom
 
@@ -31,9 +33,18 @@ function App() {
     }, []);
 
     return (
+        <BrowserRouter>
         <div className="App">
-            <Home />
+            <Routes>
+                <Route path='/' element={<HomePage />}/> 
+                <Route path='profile' >
+                    <Route index element={<ProfilePage />}/>
+                    <Route path=':userId' element={<ProfilePage />}/> {/* userId is param passed from Profile page*/ }
+                </Route> 
+            </Routes>
+            
         </div>
+        </BrowserRouter>
     );
 }
 

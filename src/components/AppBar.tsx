@@ -7,6 +7,9 @@ import MuiToolbar from '@mui/material/Toolbar';
 import FacebookLogin from 'react-facebook-login';
 import axios from 'axios';
 import { request_url } from '../constants/config';
+import MenuButton from './MenuButton';
+import { BrowserRouter, Router, Route, useNavigate } from 'react-router-dom';
+
 
 interface FacebookResponse {
     accessToken: string;
@@ -51,18 +54,26 @@ const componentClicked = () => {
     console.log('hei');
 };
 function AppBar(props: AppBarProps) {
+    const navigate = useNavigate();
     return (
         <div>
             <MuiAppBar elevation={0} position="fixed" {...props}>
                 <Toolbar sx={{ justifyContent: 'space-between' }}>
-                    <Box sx={{ flex: 1 }} />
+                    <Box sx={{ flex: 1 }} >
+                        <MenuButton
+                        />
+                    </Box>
+
                     <Link
+                        //onClick={() => navigate('/')}
+                        href='/'
                         variant="h6"
                         underline="none"
                         color="inherit"
-                        href="/premium-themes/onepirate/"
                         sx={{ fontSize: 24 }}
                     >
+                        
+
                         {'Strolly'}
                     </Link>
                     <Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>

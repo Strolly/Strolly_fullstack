@@ -28,9 +28,6 @@ yarn-error.log*
 
 # backend
 /myproject/local_settings.py
-<<<<<<< Updated upstream
-=======
 
 #vurtual env
 /backupenv
->>>>>>> Stashed changes
