@@ -28,4 +28,6 @@ yarn-error.log*
 
 # backend
 /myproject/local_settings.py
-/myproject/local_settings_example.py
+
+#vurtual env
+/backupenv

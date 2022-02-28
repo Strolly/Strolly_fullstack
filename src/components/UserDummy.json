@@ -1,0 +1,11 @@
+{
+    "userInfo": {
+    "name": "Erik Galler",
+    "age": 22
+    },
+    "paths":{ 
+        "path1": "Your first Strolly path",
+        "path2": "Your second Strolly path"
+    
+    }
+}
