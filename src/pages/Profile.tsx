@@ -1,11 +1,10 @@
 import * as React from 'react';
-import styled from 'styled-components'
+import styled from 'styled-components';
 import ProductHowItWorks from '../components/HowItWorks';
 import AppBar from '../components/AppBar';
-import AppFooter from '../components/AppFooter';
 import withRoot from '../modules/withRoot';
 import { Interface } from 'readline';
-import User from '../components/UserDummy.json'
+import User from '../components/UserDummy.json';
 import { red } from '@mui/material/colors';
 import Avatar from '@mui/material/Avatar';
 import erik from '../statics/avatars/Selfie_on_the_rocks.jpg';
@@ -20,8 +19,6 @@ import PasswordIcon from '@mui/icons-material/Password';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import SettingsAccessibilityIcon from '@mui/icons-material/SettingsAccessibility';
 
-
-
 interface User {
     firstname: string;
     lastname: string;
@@ -32,77 +29,68 @@ interface User {
 }
 
 const Container = styled.div`
-display: flex;
-flex-direction: row;
-justify-content: center;
-align-items: center;
-padding-top: 100;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding-top: 100;
 `;
 
 const TextContainer = styled.div`
-display: flex;
-flex: 2;
-flex-direction: column;
-justify-content: center;
-align-items: center;
-  
+    display: flex;
+    flex: 2;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 `;
 const Text = styled.p`
-display: flex;
-flex: 1;
-color: red;
-font-size: x-large;
-font-style: 'helvetica';
+    display: flex;
+    flex: 1;
+    color: red;
+    font-size: x-large;
+    font-style: 'helvetica';
 `;
 
 const PictureContainer = styled.div`
-display: flex;  
-flex: 1;
-justify-content: center;
-align-items: center;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
 `;
 
 const PathContainer = styled.div`
-display: flex;
-flex-direction: column;
-flex: 1;
-justify-content: center;
-align-items: flex-start;
-padding: 100;
-
-  
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 100;
 `;
 
 const PersonalInfoContainer = styled.div`
-flex-direction: column;
-display: flex;
-flex: 1;
-justify-content: center;
-align-items: flex-start;
-padding-left: 8%;
-  
+    flex-direction: column;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: flex-start;
+    padding-left: 8%;
 `;
 const ListContainer = styled.div`
-flex-direction: column;
-display: flex;
-flex: 1;
-justify-content: center;
-align-items: center;
-padding-top: 5%;
-
-  
+    flex-direction: column;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    align-items: center;
+    padding-top: 5%;
 `;
-
-
-
-
 
 function Profile() {
     const access_token = localStorage.getItem('access_token');
     const user = User;
     //const paths: Array<string> = ;
 
-    {/*useEffect(() => {
+    {
+        /*useEffect(() => {
         axios
             .get(user_request) // getting data from backend
             .then((response) => {
@@ -112,52 +100,50 @@ function Profile() {
             .catch((error) => {
                 console.log(error);
             });
-    }, []);*/}
-   
- 
-
+    }, []);*/
+    }
 
     return (
         <React.Fragment>
             <AppBar />
-            <Container >
+            <Container>
                 <PersonalInfoContainer>
                     <TextContainer>
                         <Text>Hei, {user.userInfo.name}!</Text>
                     </TextContainer>
                     <PictureContainer>
-                        <Avatar  src={erik} alt={user.userInfo.name[0]} sx={{ width: 200, height: 200 }} />
+                        <Avatar src={erik} alt={user.userInfo.name[0]} sx={{ width: 200, height: 200 }} />
                     </PictureContainer>
                     <ListContainer>
                         <List>
-                            <ListItem disablePadding >
+                            <ListItem disablePadding>
                                 <ListItemButton>
-                                <ListItemIcon>
-                                    <PasswordIcon />
-                                </ListItemIcon>
-                                <ListItemText primary="Change password" />
+                                    <ListItemIcon>
+                                        <PasswordIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Change password" />
                                 </ListItemButton>
                             </ListItem>
                             <ListItem disablePadding>
                                 <ListItemButton>
-                                <ListItemIcon>
-                                    <SettingsAccessibilityIcon />
-                                </ListItemIcon>
-                                <ListItemText primary="Change personal settings" />
+                                    <ListItemIcon>
+                                        <SettingsAccessibilityIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Change personal settings" />
                                 </ListItemButton>
                             </ListItem>
                             <ListItem disablePadding>
                                 <ListItemButton>
-                                <ListItemIcon>
-                                    <AttachMoneyIcon/>
-                                </ListItemIcon>
-                                <ListItemText primary="Fund this project" />
+                                    <ListItemIcon>
+                                        <AttachMoneyIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary="Fund this project" />
                                 </ListItemButton>
                             </ListItem>
                         </List>
-                     </ListContainer>
+                    </ListContainer>
                 </PersonalInfoContainer>
-                
+
                 <PathContainer>
                     <p> Select one of your paths to view: </p>
                     <Autocomplete
@@ -166,11 +152,9 @@ function Profile() {
                         options={['Your first Strolly path', 'Your second Strolly path']}
                         sx={{ width: 300 }}
                         renderInput={(params) => <TextField {...params} label="Paths" />}
-                        />
-
+                    />
                 </PathContainer>
             </Container>
-            <AppFooter />
         </React.Fragment>
     );
 }
