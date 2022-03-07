@@ -14,6 +14,10 @@ interface User {
 }
 
 function App() {
+    console.log(process.env);
+    console.log(process.env.NODE_ENV);
+    console.log(process.env.NODE_ENV === 'development');
+
     const [user, setUser] = useState<Comment[]>([]);
     const [path, setPath] = useState<string>('');
     const user_request = request_url.url.API_URL_USER; //localhost:8000/api/user/

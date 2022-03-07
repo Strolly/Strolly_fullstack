@@ -65,7 +65,7 @@ const local = {
 //     return await import('./local_config');
 // }
 
-export const request_url = process.env.REACT_APP_ENV_TYPE === 'local' ? local : prod;
+export const request_url = process.env.NODE_ENV === 'development' ? local : prod;
 // try {
 //     const env_type = getLocalConfig();
 //     const request_url = env_type;
