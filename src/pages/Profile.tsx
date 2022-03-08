@@ -18,6 +18,7 @@ import ListItemText from '@mui/material/ListItemText';
 import PasswordIcon from '@mui/icons-material/Password';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import SettingsAccessibilityIcon from '@mui/icons-material/SettingsAccessibility';
+import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 
 interface User {
     firstname: string;
@@ -34,6 +35,7 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
     padding-top: 100;
+    height: 400;
 `;
 
 const TextContainer = styled.div`
@@ -62,9 +64,12 @@ const PathContainer = styled.div`
     display: flex;
     flex-direction: column;
     flex: 1;
+    flex-grow: 1;
     justify-content: center;
     align-items: flex-start;
     padding: 100;
+    width: 100%;
+    height: 100%;
 `;
 
 const PersonalInfoContainer = styled.div`
@@ -83,6 +88,17 @@ const ListContainer = styled.div`
     align-items: center;
     padding-top: 5%;
 `;
+
+const columns: GridColDef[] = [
+    { field: 'id', headerName: 'ID', width: 70 },
+    { field: 'name', headerName: 'Name', width: 300 },
+    { field: 'distance', headerName: 'Distance [km]', width: 120 },
+];
+
+const rows = [
+    { id: 1, name: 'Your first Strolly path', distance: 2.5 },
+    { id: 2, name: 'Your second Strolly path', distance: 5.0 },
+];
 
 function Profile() {
     const access_token = localStorage.getItem('access_token');
@@ -144,7 +160,7 @@ function Profile() {
                     </ListContainer>
                 </PersonalInfoContainer>
 
-                <PathContainer>
+                <PathContainer style={{ height: '100px' }}>
                     <p> Select one of your paths to view: </p>
                     <Autocomplete
                         disablePortal
@@ -153,6 +169,7 @@ function Profile() {
                         sx={{ width: 300 }}
                         renderInput={(params) => <TextField {...params} label="Paths" />}
                     />
+                    {/*<DataGrid rows={rows} columns={columns} pageSize={5} rowsPerPageOptions={[5]} />*/}
                 </PathContainer>
             </Container>
         </React.Fragment>
