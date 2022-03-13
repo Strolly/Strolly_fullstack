@@ -83,10 +83,12 @@ export default function MapView() {
     }, [map]);
 
     const addPoints = async (event) => {
+        console.log('click');
         const coordinates = map.unproject(event.point);
         const newPoint = turf.point([coordinates.lng, coordinates.lat]);
         path.features.push(newPoint);
-        map.getSource('dropoffs-symbol').setData(path);
+        console.log(path);
+        map.getSource('point-symbol').setData(path);
         if (path.features.length > 2) {
             generateRoute();
         }
@@ -147,13 +149,23 @@ export default function MapView() {
                         height: '80vh',
                     }}
                 >
-                    <Grid style={{ display: 'flex', alignItems: 'flex-end', flexDirection: 'column' }}>
+                    <Grid
+                        style={{
+                            position: 'absolute',
+                            width: '100%',
+                            display: 'flex',
+                            alignItems: 'flex-end',
+                            flexDirection: 'column',
+                            paddingRight: 2,
+                            paddingTop: 10,
+                        }}
+                    >
                         <IconButton
                             aria-label="save"
                             style={{
                                 color: 'green',
                                 zIndex: 1,
-                                margin: 1,
+                                //margin: 2,
                             }}
                         >
                             <SaveIcon />
@@ -163,7 +175,7 @@ export default function MapView() {
                             style={{
                                 color: 'red',
                                 zIndex: 1,
-                                margin: 1,
+                                //margin: 2,
                             }}
                         >
                             <DeleteForeverIcon />
