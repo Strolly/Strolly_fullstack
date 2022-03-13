@@ -5,7 +5,7 @@ import AppBar from '../components/AppBar';
 import MapView from '../components/MapView';
 import withRoot from '../modules/withRoot';
 import { useAuth } from '../hooks/AuthContext';
-import mapboxgl from 'mapbox-gl';
+import mapboxgl from '!mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import { AuthToken } from '../hooks/AuthContext';
 
