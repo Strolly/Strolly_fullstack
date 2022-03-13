@@ -15,6 +15,8 @@ import { RecordWithTtl } from 'dns';
 import { BrowserRouter, Router, Route, useNavigate } from 'react-router-dom';
 import User from './UserDummy.json';
 import erik from '../statics/avatars/Selfie_on_the_rocks.jpg';
+import { useAuth } from '../hooks/AuthContext';
+import { accessToken } from 'mapbox-gl';
 
 /*interface Props {
   children: (data: {
@@ -31,6 +33,7 @@ function stringAvatar(name: string) {
 }
 
 export default function AccountMenu() {
+    const { token, setToken } = useAuth();
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -38,6 +41,11 @@ export default function AccountMenu() {
     };
     const handleClose = () => {
         setAnchorEl(null);
+    };
+    const handleLogout = () => {
+        setToken(null);
+        sessionStorage.clear();
+        navigate('/');
     };
     const navigate = useNavigate();
     const user = User;
@@ -104,7 +112,7 @@ export default function AccountMenu() {
                     </ListItemIcon>
                     Settings
                 </MenuItem>
-                <MenuItem>
+                <MenuItem onClick={handleLogout}>
                     <ListItemIcon>
                         <Logout fontSize="small" />
                     </ListItemIcon>
