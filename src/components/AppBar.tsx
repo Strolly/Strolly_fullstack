@@ -25,7 +25,6 @@ function AppBar(props: AppBarProps) {
         if (token == null) {
             const token = sessionStorage.getItem('access_token');
             setIsAuth(token);
-            console.log('acess token:', token);
         } else {
             setIsAuth(token);
         }

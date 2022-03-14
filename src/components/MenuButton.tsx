@@ -49,7 +49,6 @@ export default function AccountMenu() {
     };
     const navigate = useNavigate();
     const user = User;
-    console.log(stringAvatar(user.userInfo.name));
 
     return (
         <React.Fragment>
