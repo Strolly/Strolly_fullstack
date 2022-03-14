@@ -36,6 +36,30 @@ function FacebookAuth() {
                 sessionStorage.setItem('access_token', res.data.access_token);
                 sessionStorage.setItem('refresh_token', res.data.refresh_token);
                 setToken(res.data.access_token);
+                console.log(request_url.url.API_URL_USER);
+                console.log({
+                    id: response.id,
+                    email: response.email,
+                    name: response.name,
+                    adresse: 'Fjordgata 29',
+                    age: '',
+                    picture: response.picture.data.url,
+                });
+                axios
+                    .post(request_url.url.API_URL_USER, {
+                        id: response.id,
+                        email: response.email,
+                        name: response.name,
+                        adresse: 'Fjordgata 29',
+                        age: '',
+                        picture: response.picture.data.url,
+                    }) // getting data from backend
+                    .then((response) => {
+                        console.log(response);
+                    })
+                    .catch((error) => {
+                        console.log(error);
+                    });
             });
     };
     return (
