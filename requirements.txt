@@ -9,4 +9,4 @@ gunicorn
 whitenoise
 django-oauth-toolkit
 drf-social-oauth2
-django_filters
+django_filter
