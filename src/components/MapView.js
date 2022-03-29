@@ -7,6 +7,7 @@ import * as turf from '@turf/turf';
 import { Button, IconButton, Grid, Box } from '@mui/material';
 import SaveIcon from '@material-ui/icons/Save';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import axios from 'axios';
 
 mapboxgl.accessToken =
     'pk.eyJ1Ijoibmlsc21oIiwiYSI6ImNreXExZDdkMjBmY2Uyb28zdWVycHF3MGkifQ.3NulJNKdg77Kj-o0FllTOA';
@@ -18,7 +19,7 @@ export default function MapView() {
     const [lat, setLat] = useState(63.446827);
     const [zoom, setZoom] = useState(12);
     const [finalPath, setFinalPath] = useState([]);
-    const path = turf.featureCollection([]);
+    const [path, setPath] = useState(turf.featureCollection([]));
     const nothing = turf.featureCollection([]);
 
     useEffect(() => {
@@ -83,11 +84,9 @@ export default function MapView() {
     }, [map]);
 
     const addPoints = async (event) => {
-        console.log('click');
         const coordinates = map.unproject(event.point);
         const newPoint = turf.point([coordinates.lng, coordinates.lat]);
         path.features.push(newPoint);
-        console.log(path);
         map.getSource('point-symbol').setData(path);
         if (path.features.length > 2) {
             generateRoute();
@@ -97,6 +96,7 @@ export default function MapView() {
     const generateRoute = async () => {
         const query = await fetch(queryURL(), { method: 'GET' });
         const response = await query.json();
+        console.log(response);
 
         if (response.code !== 'Ok') {
             const handleMessage =
@@ -111,7 +111,6 @@ export default function MapView() {
 
         const routeGeoJSON = turf.featureCollection([turf.feature(response.trips[0].geometry)]);
         setFinalPath(routeGeoJSON);
-        console.log(routeGeoJSON);
         // Update the `route` source by getting the route source
         // and setting the data equal to routeGeoJSON
         map.getSource('route').setData(routeGeoJSON);
@@ -127,6 +126,26 @@ export default function MapView() {
         return `https://api.mapbox.com/optimized-trips/v1/mapbox/walking/${coordinates.join(
             ';',
         )}?&overview=full&steps=true&geometries=geojson&source=first&access_token=${mapboxgl.accessToken}`;
+    };
+
+    const savePath = () => {
+        length = turf.length(finalPath, 'kilometers');
+        const coordinates = finalPath.features[0].geometry;
+        axios.post('http://localhost:8000/api/path_geom/', {
+            userID: sessionStorage.getItem('access_token'),
+            geom: coordinates,
+            length: length,
+            type: 'walking',
+        });
+    };
+
+    const clearPath = () => {
+        console.log(path.features.length);
+        map.getSource('route').setData(turf.featureCollection([]));
+        map.getSource('point-symbol').setData(turf.featureCollection([]));
+        while (path.features.length) {
+            path.features.pop();
+        }
     };
 
     return (
@@ -167,6 +186,7 @@ export default function MapView() {
                                 zIndex: 1,
                                 //margin: 2,
                             }}
+                            onClick={() => savePath()}
                         >
                             <SaveIcon />
                         </IconButton>
@@ -177,6 +197,7 @@ export default function MapView() {
                                 zIndex: 1,
                                 //margin: 2,
                             }}
+                            onClick={() => clearPath()}
                         >
                             <DeleteForeverIcon />
                         </IconButton>
