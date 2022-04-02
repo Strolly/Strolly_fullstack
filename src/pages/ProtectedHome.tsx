@@ -59,34 +59,37 @@ function ProtectedHome() {
         <React.Fragment>
             <AppBar />
             {!isAuth ? (
-                <div>
-                    <Box width={1} sx={{ mt: 3 }} style={{ marginTop: '0px' }}>
-                        <div
-                            id="comparison-container"
+                <Box width={1} sx={{ bgcolor: 'secondary.light', pt: '30px' }}>
+                    <div
+                        id="comparison-container"
+                        style={{
+                            position: 'relative',
+                            height: '80vh',
+                            display: 'flex',
+                            justifyContent: 'center',
+                        }}
+                    >
+                        <Box
+                            ref={mapContainer}
+                            className="map-container"
                             style={{
-                                position: 'relative',
+                                position: 'absolute',
+                                top: '0',
+                                bottom: '0',
+                                width: '90%',
                                 height: '80vh',
+                                border: 3,
+                                borderRadius: 8,
+                                borderColor: 'primary.main',
                             }}
-                        >
-                            <Box
-                                ref={mapContainer}
-                                className="map-container"
-                                style={{
-                                    position: 'absolute',
-                                    top: '0',
-                                    bottom: '0',
-                                    width: '100%',
-                                    height: '80vh',
-                                }}
-                            ></Box>
-                        </div>
-                    </Box>
-                </div>
+                        />
+                    </div>
+                </Box>
             ) : (
-                <div>
+                <Box sx={{ bgcolor: 'secondary.light' }}>
                     <MapView />
                     <HowItWorks />
-                </div>
+                </Box>
             )}
         </React.Fragment>
     );

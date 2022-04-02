@@ -4,9 +4,10 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import styled from 'styled-components';
 import * as turf from '@turf/turf';
-import { Button, IconButton, Grid, Box } from '@mui/material';
+import { Button, IconButton, Grid, Box, Popover, Typography, Divider, TextField } from '@mui/material';
 import SaveIcon from '@material-ui/icons/Save';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
+import MenuIcon from '@mui/icons-material/Menu';
 import axios from 'axios';
 
 mapboxgl.accessToken =
@@ -21,6 +22,8 @@ export default function MapView() {
     const [finalPath, setFinalPath] = useState([]);
     const [path, setPath] = useState(turf.featureCollection([]));
     const nothing = turf.featureCollection([]);
+    const [open, setOpen] = useState(false);
+    const [anchorEl, setAnchorEl] = useState(null);
 
     useEffect(() => {
         const attachMap = () => {
@@ -148,13 +151,20 @@ export default function MapView() {
         }
     };
 
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+        setOpen(!open);
+    };
+
     return (
-        <Box width={1} sx={{ mt: 3 }} style={{ marginTop: '0px' }}>
+        <Box width={1} style={{ paddingTop: '30px' }}>
             <div
                 id="comparison-container"
                 style={{
                     position: 'relative',
                     height: '80vh',
+                    display: 'flex',
+                    justifyContent: 'center',
                 }}
             >
                 <Box
@@ -164,8 +174,11 @@ export default function MapView() {
                         position: 'absolute',
                         top: '0',
                         bottom: '0',
-                        width: '100%',
+                        width: '90%',
                         height: '80vh',
+                        border: 3,
+                        borderRadius: 8,
+                        borderColor: 'primary.main',
                     }}
                 >
                     <Grid
@@ -173,34 +186,140 @@ export default function MapView() {
                             position: 'absolute',
                             width: '100%',
                             display: 'flex',
-                            alignItems: 'flex-end',
-                            flexDirection: 'column',
+                            alignItems: 'space-between',
                             paddingRight: 2,
                             paddingTop: 10,
                         }}
                     >
-                        <IconButton
-                            aria-label="save"
+                        <Grid
                             style={{
-                                color: 'green',
-                                zIndex: 1,
-                                //margin: 2,
+                                display: 'flex',
+                                alignItems: 'flex-start',
+                                width: '50%',
                             }}
-                            onClick={() => savePath()}
                         >
-                            <SaveIcon />
-                        </IconButton>
-                        <IconButton
-                            aria-label="save"
+                            <IconButton
+                                aria-label="open"
+                                aria-describedby={'simple-popover'}
+                                style={{
+                                    zIndex: 1,
+                                }}
+                                onClick={handleClick}
+                            >
+                                <MenuIcon />
+                                <Popover
+                                    id={'simple-popover'}
+                                    open={open}
+                                    anchorEl={anchorEl}
+                                    anchorOrigin={{
+                                        vertical: 'bottom',
+                                        horizontal: 'left',
+                                    }}
+                                >
+                                    <Grid
+                                        sx={{
+                                            '&:hover': {
+                                                background: '#E0E0E0',
+                                                cursor: 'pointer',
+                                            },
+                                        }}
+                                    >
+                                        <Typography sx={{ p: 2 }}>Get your saved routes</Typography>
+                                    </Grid>
+                                    <Divider />
+                                    <Grid
+                                        sx={{
+                                            '&:hover': {
+                                                background: '#E0E0E0',
+                                                cursor: 'pointer',
+                                            },
+                                        }}
+                                    >
+                                        <Typography sx={{ p: 2 }}>
+                                            Get routes which intersects with your route
+                                        </Typography>
+
+                                        <TextField
+                                            id="outlined-select-currency"
+                                            select
+                                            label="Route"
+                                            sx={{ width: '30%', ml: 2, mr: 2, mb: 2 }}
+                                            size="small"
+                                            // value={}
+                                            // onChange={}
+                                        />
+                                        {/* {currencies.map((option) => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))} */}
+                                        {/* </TextField> */}
+                                    </Grid>
+                                    <Divider />
+                                    <Grid
+                                        sx={{
+                                            '&:hover': {
+                                                background: '#E0E0E0',
+                                                cursor: 'pointer',
+                                            },
+                                        }}
+                                    >
+                                        <Typography sx={{ p: 2 }}>
+                                            Get routes which is within the given radius of your route
+                                        </Typography>
+                                        <TextField
+                                            id="outlined-select-currency"
+                                            select
+                                            label="Route"
+                                            sx={{ width: '30%', ml: 2, mr: 2, mb: 2 }}
+                                            size="small"
+                                            // value={}
+                                            // onChange={}
+                                        />
+                                        <TextField
+                                            id="outlined-select-currency"
+                                            select
+                                            label="Radius"
+                                            sx={{ width: '30%', mr: 2, mb: 2 }}
+                                            size="small"
+                                            // value={}
+                                            // onChange={}
+                                        />
+                                    </Grid>
+                                </Popover>
+                            </IconButton>
+                        </Grid>
+                        <Grid
                             style={{
-                                color: 'red',
-                                zIndex: 1,
-                                //margin: 2,
+                                display: 'flex',
+                                alignItems: 'flex-end',
+                                flexDirection: 'column',
+                                width: '50%',
                             }}
-                            onClick={() => clearPath()}
                         >
-                            <DeleteForeverIcon />
-                        </IconButton>
+                            <IconButton
+                                aria-label="save"
+                                style={{
+                                    color: 'green',
+                                    zIndex: 1,
+                                    //margin: 2,
+                                }}
+                                onClick={() => savePath()}
+                            >
+                                <SaveIcon />
+                            </IconButton>
+                            <IconButton
+                                aria-label="save"
+                                style={{
+                                    color: 'red',
+                                    zIndex: 1,
+                                    //margin: 2,
+                                }}
+                                onClick={() => clearPath()}
+                            >
+                                <DeleteForeverIcon />
+                            </IconButton>
+                        </Grid>
                     </Grid>
                 </Box>
             </div>
