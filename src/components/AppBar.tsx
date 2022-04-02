@@ -5,6 +5,8 @@ import Link from '@mui/material/Link';
 import { styled } from '@mui/material/styles';
 import MuiToolbar from '@mui/material/Toolbar';
 import MenuButton from './MenuButton';
+import StrollerIcon from '@mui/icons-material/Stroller';
+import { IconButton } from '@mui/material';
 import { BrowserRouter, Router, Route, useNavigate } from 'react-router-dom';
 import FacebookAuth from '../components/FacebookAuth';
 import { AuthToken, useAuth } from '../hooks/AuthContext';
@@ -35,8 +37,8 @@ function AppBar(props: AppBarProps) {
     });
     return (
         <div>
-            <MuiAppBar elevation={0} position="fixed" {...props}>
-                <Toolbar sx={{ justifyContent: 'space-between' }}>
+            <MuiAppBar elevation={0} position="fixed" sx={{ backgroundColor: '#0083DB' }} {...props}>
+                <Toolbar sx={{ justifyContent: 'center', alignItems: 'center' }}>
                     <Box sx={{ flex: 1 }}></Box>
 
                     <Link
@@ -45,10 +47,17 @@ function AppBar(props: AppBarProps) {
                         variant="h6"
                         underline="none"
                         color="inherit"
-                        sx={{ fontSize: 24 }}
+                        sx={{ fontSize: 30 }}
                     >
+                        <IconButton sx={{ backgroundColor: 'transparent', pb: 1.5 }} onClick={() => {}}>
+                            <StrollerIcon />
+                        </IconButton>
                         {'Strolly'}
+                        <IconButton sx={{ backgroundColor: 'transparent', pb: 1.5 }}>
+                            <StrollerIcon />
+                        </IconButton>
                     </Link>
+
                     <Box sx={{ flex: 1, display: 'flex', justifyContent: 'flex-end' }}>
                         <div>
                             {isAuth == null ? <FacebookAuth /> : <MenuButton />}
