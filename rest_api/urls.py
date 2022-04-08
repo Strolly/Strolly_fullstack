@@ -14,6 +14,6 @@ from . import views
 
 def get_router():
     router = routers.DefaultRouter()
-    router.register(r'user', views.User)
-    router.register(r'path_geom', views.Path_geom)
+    router.register(r'user', views.UserViewset)
+    router.register(r'path_geom', views.Path_geomViewset)
     return router

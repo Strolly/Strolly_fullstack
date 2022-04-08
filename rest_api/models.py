@@ -1,4 +1,4 @@
-from django.db import models
+from django.contrib.gis.db import models
 
 # Create your models here.
 class User(models.Model):
@@ -13,9 +13,9 @@ class User(models.Model):
         return self.name
 
 class Path_geom(models.Model):
-    id = models.CharField(max_length=200, primary_key=True)
+    id = models.AutoField(primary_key=True)
     userID = models.CharField(max_length=200, blank=False)
-    geom = models.TextField()
+    geom = models.LineStringField(null=True)
     length = models.CharField(max_length=50)
     type = models.TextField()
 
