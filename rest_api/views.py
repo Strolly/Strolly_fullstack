@@ -1,4 +1,6 @@
+from itsdangerous import Serializer
 from rest_framework import viewsets
+from rest_framework.views import APIView
 from django_filters import rest_framework as filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -13,17 +15,21 @@ class UserViewset(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     filter_fields = ['id']
 
-class Path_geomViewset(viewsets.ModelViewSet):
+class Path_geomViewset(APIView):
     queryset=Path_geom.objects.all()
     serializer_class = Path_geomSerializer
 
-    def create(self, request, *args, **kwargs):
-        request.data['geom'] = GEOSGeometry(str(request.data['geom']))
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+    def get(self, request):
+        path = Path_geom.objects.all()
+        serializer = Path_geomSerializer(path, many=True)
+        return Response(serializer.data)
 
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    def post(self, request, format=None):
+        serializer = Path_geomSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.error, status=status.HTTP_400_BAD_REQUEST)
         
         
 
