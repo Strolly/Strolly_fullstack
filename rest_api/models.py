@@ -18,6 +18,7 @@ class Path_geom(models.Model):
     geom = models.LineStringField(null=True)
     length = models.CharField(max_length=50)
     type = models.TextField()
+    name = models.CharField(max_length=30)
 
     def __str__(self):
         return self.name
