@@ -21,7 +21,7 @@ export default function MapView() {
     const [zoom, setZoom] = useState(12);
     const [finalPath, setFinalPath] = useState([]);
     const [path, setPath] = useState(turf.featureCollection([]));
-    const nothing = turf.featureCollection([]);
+    const [nothing, setNothing] = useState(turf.featureCollection([]));
     const [open, setOpen] = useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
 
@@ -61,22 +61,19 @@ export default function MapView() {
                     data: nothing,
                 });
 
-                map.addLayer(
-                    {
-                        id: 'routeline-active',
-                        type: 'line',
-                        source: 'route',
-                        layout: {
-                            'line-join': 'round',
-                            'line-cap': 'round',
-                        },
-                        paint: {
-                            'line-color': '#3887be',
-                            'line-width': ['interpolate', ['linear'], ['zoom'], 12, 3, 22, 12],
-                        },
+                map.addLayer({
+                    id: 'route',
+                    type: 'line',
+                    source: 'route',
+                    layout: {
+                        'line-join': 'round',
+                        'line-cap': 'round',
                     },
-                    'waterway-label',
-                );
+                    paint: {
+                        'line-color': '#3887be',
+                        'line-width': ['interpolate', ['linear'], ['zoom'], 12, 3, 22, 12],
+                    },
+                });
 
                 await map.on('click', addPoints);
             });
@@ -134,26 +131,48 @@ export default function MapView() {
     const savePath = () => {
         length = turf.length(finalPath, 'kilometers');
         const coordinates = finalPath.features[0].geometry;
-        axios.post('http://localhost:8000/api/path_geom/', {
-            userID: sessionStorage.getItem('access_token'),
+        axios.post('http://localhost:8000/path_geom', {
+            userid: sessionStorage.getItem('id'),
             geom: coordinates,
             length: length,
             type: 'walking',
+            name: 'Nils-Martin',
         });
     };
 
     const clearPath = () => {
-        console.log(path.features.length);
         map.getSource('route').setData(turf.featureCollection([]));
         map.getSource('point-symbol').setData(turf.featureCollection([]));
         while (path.features.length) {
             path.features.pop();
+        }
+        while (nothing.features.length) {
+            nothing.features.pop();
         }
     };
 
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
         setOpen(!open);
+    };
+
+    const fetchRoute = async () => {
+        clearPath();
+
+        await axios
+            .get('http://localhost:8000/path_geom')
+            .then(function (response) {
+                let owned_path = response.data.features.filter(
+                    (path) => path.properties.userid === sessionStorage.getItem('id'),
+                );
+                for (let i = 0; i <= owned_path.length - 1; i++) {
+                    nothing.features.push(owned_path[i]);
+                    map.getSource('route').setData(nothing);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
     };
 
     return (
@@ -223,6 +242,7 @@ export default function MapView() {
                                                 cursor: 'pointer',
                                             },
                                         }}
+                                        onClick={fetchRoute}
                                     >
                                         <Typography sx={{ p: 2 }}>Get your saved routes</Typography>
                                     </Grid>
