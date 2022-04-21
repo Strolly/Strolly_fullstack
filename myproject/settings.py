@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_api',                       
     'rest_framework',   
+    'rest_framework_gis',
     'corsheaders',
     'oauth2_provider',
     'social_django',

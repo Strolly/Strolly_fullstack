@@ -18,13 +18,13 @@ from django.urls import path, include, re_path
 from django.views.generic import TemplateView
 
 
-from rest_api.urls import get_router
+# from rest_api.urls import get_router
 
-router = get_router()
+# router = get_router()
 
 urlpatterns = [
     path('auth/', include('drf_social_oauth2.urls', namespace='drf')),
     path('admin/', admin.site.urls),
-    path('api/', include(router.urls)),
+    path('', include('rest_api.urls')),
     re_path('.*',TemplateView.as_view(template_name='index.html')),    
 ]

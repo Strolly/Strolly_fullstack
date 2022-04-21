@@ -1,22 +1,22 @@
-# from django.urls import path
+# from rest_framework import routers
 
 # from . import views
+# from django.urls import path
 
 
-# urlpatterns = [
-#     path('create/', views.AddStrollingPath.as_view()),
-#     path('view/', views.GetStrollingPath.as_view()),
-# ]
-
-from rest_framework import routers
+# def get_router():
+#     router = routers.DefaultRouter()
+#     router.register(r'user', views.UserViewset)
+#     router.register(r'path_geom', views.Path_geomViewset)
+#     return router
 
 from . import views
 from django.urls import path
+from rest_framework.urlpatterns import format_suffix_patterns
 
+urlpatterns = [
+    path('user', views.UserViewset.as_view({'get': 'list'})),
+    path('path_geom', views.Path_geomViewset.as_view({'post': 'create', 'get': 'list'}))
+]
 
-def get_router():
-
-    router = routers.DefaultRouter()
-    router.register(r'user', views.UserViewset)
-    router.register(r'path_geom', views.Path_geomViewset)
-    return router
+urlpatterns = format_suffix_patterns(urlpatterns)
