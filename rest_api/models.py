@@ -19,6 +19,7 @@ class Path_geom(models.Model):
     length = models.CharField(max_length=50)
     type = models.TextField()
     name = models.CharField(max_length=30, null=True)
+    color = models.CharField(max_length=30)
     
 
     def __str__(self):

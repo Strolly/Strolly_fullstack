@@ -4,11 +4,31 @@ import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import styled from 'styled-components';
 import * as turf from '@turf/turf';
-import { Button, IconButton, Grid, Box, Popover, Typography, Divider, TextField } from '@mui/material';
+import {
+    Button,
+    IconButton,
+    Grid,
+    Box,
+    Popover,
+    Typography,
+    Divider,
+    TextField,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle,
+    FormControl,
+    FormControlLabel,
+    InputLabel,
+    MenuItem,
+    Select,
+} from '@mui/material';
 import SaveIcon from '@material-ui/icons/Save';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import MenuIcon from '@mui/icons-material/Menu';
 import axios from 'axios';
+import colors from '../constants/colors';
 
 mapboxgl.accessToken =
     'pk.eyJ1Ijoibmlsc21oIiwiYSI6ImNreXExZDdkMjBmY2Uyb28zdWVycHF3MGkifQ.3NulJNKdg77Kj-o0FllTOA';
@@ -21,9 +41,15 @@ export default function MapView() {
     const [zoom, setZoom] = useState(12);
     const [finalPath, setFinalPath] = useState([]);
     const [path, setPath] = useState(turf.featureCollection([]));
-    const [nothing, setNothing] = useState(turf.featureCollection([]));
-    const [open, setOpen] = useState(false);
+    const [ownRoutes, setOwnRoutes] = useState(turf.featureCollection([]));
+    const [createdRoute, setCreatedRoute] = useState(turf.featureCollection([]));
+    const [openPopover, setOpenPopover] = useState(false);
+    const [openDialog, setOpenDialog] = React.useState(false);
     const [anchorEl, setAnchorEl] = useState(null);
+    const [routeName, setRouteName] = useState('');
+    const [routeType, setRouteType] = useState('walking');
+    const [ownRouteNames, setOwnRouteNames] = useState([]);
+    const [intersectRoute, setIntersectRoute] = useState([]);
 
     useEffect(() => {
         const attachMap = () => {
@@ -56,21 +82,39 @@ export default function MapView() {
                         'circle-color': '#3887be',
                     },
                 });
-                map.addSource('route', {
+                map.addSource('route_created', {
                     type: 'geojson',
-                    data: nothing,
+                    data: createdRoute,
                 });
 
                 map.addLayer({
-                    id: 'route',
+                    id: 'route_created',
                     type: 'line',
-                    source: 'route',
+                    source: 'route_created',
                     layout: {
                         'line-join': 'round',
                         'line-cap': 'round',
                     },
                     paint: {
                         'line-color': '#3887be',
+                        'line-width': ['interpolate', ['linear'], ['zoom'], 12, 3, 22, 12],
+                    },
+                });
+                map.addSource('route_own', {
+                    type: 'geojson',
+                    data: [],
+                });
+
+                map.addLayer({
+                    id: 'route_own',
+                    type: 'line',
+                    source: 'route_own',
+                    layout: {
+                        'line-join': 'round',
+                        'line-cap': 'round',
+                    },
+                    paint: {
+                        'line-color': ['get', 'color'],
                         'line-width': ['interpolate', ['linear'], ['zoom'], 12, 3, 22, 12],
                     },
                 });
@@ -82,6 +126,32 @@ export default function MapView() {
         !map && attachMap(mapContainer);
         map && fillMap(mapContainer);
     }, [map]);
+
+    useEffect(async () => {
+        await axios
+            .get('http://localhost:8000/path_geom')
+            .then(function (response) {
+                let owned_path = response.data.features.filter(
+                    (path) => path.properties.userid === sessionStorage.getItem('id'),
+                );
+                for (let i = 0; i <= owned_path.length - 1; i++) {
+                    ownRoutes.features.push(owned_path[i]);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        console.log(ownRoutes);
+        for (let i = 0; i <= ownRoutes.features.length; i++) {
+            console.log(ownRoutes.features[i].properties.name);
+            ownRouteNames.push(ownRoutes.features[i].properties.name);
+        }
+    }, []);
+
+    const displayOwnRoutes = () => {
+        clearPath();
+        map.getSource('route_own').setData(ownRoutes);
+    };
 
     const addPoints = async (event) => {
         const coordinates = map.unproject(event.point);
@@ -104,7 +174,6 @@ export default function MapView() {
                     ? 'Refresh to start a new route. For more information: https://docs.mapbox.com/api/navigation/optimization/#optimization-api-errors'
                     : 'Try a different point.';
             alert(`${response.code} - ${response.message}\n\n${handleMessage}`);
-            // Remove invalid point
             path.features.pop();
             return;
         }
@@ -113,7 +182,7 @@ export default function MapView() {
         setFinalPath(routeGeoJSON);
         // Update the `route` source by getting the route source
         // and setting the data equal to routeGeoJSON
-        map.getSource('route').setData(routeGeoJSON);
+        map.getSource('route_created').setData(routeGeoJSON);
     };
 
     const queryURL = () => {
@@ -135,44 +204,47 @@ export default function MapView() {
             userid: sessionStorage.getItem('id'),
             geom: coordinates,
             length: length,
-            type: 'walking',
-            name: 'Nils-Martin',
+            type: routeType,
+            name: routeName,
+            color: colors[Math.floor(Math.random() * colors.length)],
         });
+        handleCloseDialog();
     };
 
     const clearPath = () => {
-        map.getSource('route').setData(turf.featureCollection([]));
+        map.getSource('route_created').setData(turf.featureCollection([]));
+        map.getSource('route_own').setData(turf.featureCollection([]));
         map.getSource('point-symbol').setData(turf.featureCollection([]));
         while (path.features.length) {
             path.features.pop();
         }
-        while (nothing.features.length) {
-            nothing.features.pop();
+        while (ownRoutes.features.length) {
+            ownRoutes.features.pop();
+        }
+        while (createdRoute.features.length) {
+            createdRoute.features.pop();
         }
     };
 
-    const handleClick = (event) => {
+    const handleClickPopover = (event) => {
         setAnchorEl(event.currentTarget);
-        setOpen(!open);
+        setOpenPopover(!openPopover);
     };
 
-    const fetchRoute = async () => {
-        clearPath();
+    const handleClickOpenDialog = () => {
+        setOpenDialog(true);
+    };
 
-        await axios
-            .get('http://localhost:8000/path_geom')
-            .then(function (response) {
-                let owned_path = response.data.features.filter(
-                    (path) => path.properties.userid === sessionStorage.getItem('id'),
-                );
-                for (let i = 0; i <= owned_path.length - 1; i++) {
-                    nothing.features.push(owned_path[i]);
-                    map.getSource('route').setData(nothing);
-                }
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+    };
+
+    const handleSetRouteName = (event) => {
+        setRouteName(event.target.value);
+    };
+
+    const handleSetRouteType = (event) => {
+        setRouteType(event.target.value);
     };
 
     return (
@@ -223,12 +295,12 @@ export default function MapView() {
                                 style={{
                                     zIndex: 1,
                                 }}
-                                onClick={handleClick}
+                                onClick={handleClickPopover}
                             >
                                 <MenuIcon />
                                 <Popover
                                     id={'simple-popover'}
-                                    open={open}
+                                    open={openPopover}
                                     anchorEl={anchorEl}
                                     anchorOrigin={{
                                         vertical: 'bottom',
@@ -242,7 +314,7 @@ export default function MapView() {
                                                 cursor: 'pointer',
                                             },
                                         }}
-                                        onClick={fetchRoute}
+                                        onClick={displayOwnRoutes}
                                     >
                                         <Typography sx={{ p: 2 }}>Get your saved routes</Typography>
                                     </Grid>
@@ -265,15 +337,13 @@ export default function MapView() {
                                             label="Route"
                                             sx={{ width: '30%', ml: 2, mr: 2, mb: 2 }}
                                             size="small"
-                                            // value={}
+                                            value={ownRouteNames[0]}
                                             // onChange={}
-                                        />
-                                        {/* {currencies.map((option) => (
-                                            <MenuItem key={option.value} value={option.value}>
-                                                {option.label}
-                                            </MenuItem>
-                                        ))} */}
-                                        {/* </TextField> */}
+                                        >
+                                            {ownRouteNames.map((name) => (
+                                                <MenuItem key={name}>{name}</MenuItem>
+                                            ))}
+                                        </TextField>
                                     </Grid>
                                     <Divider />
                                     <Grid
@@ -324,7 +394,7 @@ export default function MapView() {
                                     zIndex: 1,
                                     //margin: 2,
                                 }}
-                                onClick={() => savePath()}
+                                onClick={handleClickOpenDialog}
                             >
                                 <SaveIcon />
                             </IconButton>
@@ -339,6 +409,45 @@ export default function MapView() {
                             >
                                 <DeleteForeverIcon />
                             </IconButton>
+                            <Dialog open={openDialog} onClose={handleCloseDialog}>
+                                <DialogTitle>Create route</DialogTitle>
+                                <DialogContent>
+                                    <DialogContentText>
+                                        Enter the name and type of your route.
+                                    </DialogContentText>
+                                    <Grid sx={{ display: 'flex', flexDirection: 'column' }}>
+                                        <TextField
+                                            autoFocus
+                                            margin="dense"
+                                            id="name"
+                                            label="Name"
+                                            type="name"
+                                            variant="standard"
+                                            onChange={handleSetRouteName}
+                                        />
+                                        <FormControl sx={{ mt: 2, minWidth: 120 }}>
+                                            <InputLabel htmlFor="type">Type</InputLabel>
+                                            <Select
+                                                autoFocus
+                                                value={routeType}
+                                                onChange={handleSetRouteType}
+                                                label="type"
+                                                inputProps={{
+                                                    name: 'type',
+                                                    id: 'type',
+                                                }}
+                                            >
+                                                <MenuItem value="walking ">walking</MenuItem>
+                                                <MenuItem value="running">running</MenuItem>
+                                            </Select>
+                                        </FormControl>
+                                    </Grid>
+                                </DialogContent>
+                                <DialogActions>
+                                    <Button onClick={handleCloseDialog}>Cancel</Button>
+                                    <Button onClick={savePath}>Create</Button>
+                                </DialogActions>
+                            </Dialog>
                         </Grid>
                     </Grid>
                 </Box>
