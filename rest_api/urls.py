@@ -16,7 +16,8 @@ from rest_framework.urlpatterns import format_suffix_patterns
 
 urlpatterns = [
     path('user', views.UserViewset.as_view({'get': 'list'})),
-    path('path_geom', views.Path_geomViewset.as_view({'post': 'create', 'get': 'list'}))
+    path('path_geom', views.Path_geomViewset.as_view({'post': 'create', 'get': 'list'})),
+    path('intersect', views.Intersected_pathsViewset.as_view({'get': 'list'}))
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)
