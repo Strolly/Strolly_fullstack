@@ -160,7 +160,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'build/static')
@@ -184,6 +184,9 @@ SOCIAL_AUTH_FACEBOOK_SECRET = '3d6191526537b18b63a6cb3109915c6a'  # App Secret
 
 #SOCIAL_AUTH_FACEBOOK_KEY: '618576985900653'   # App ID
 #SOCIAL_AUTH_FACEBOOK_SECRET = '54b747c274544c888634fa8c4b7013f9'  # App Secret
+
+django_heroku.settings(locals())
+
 try:
     from .local_settings import *
 except ImportError:
