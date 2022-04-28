@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import styled from 'styled-components';
 import * as turf from '@turf/turf';
 import {
     Button,
@@ -19,25 +18,30 @@ import {
     DialogContentText,
     DialogTitle,
     FormControl,
-    FormControlLabel,
     InputLabel,
     MenuItem,
     Select,
+    Alert,
 } from '@mui/material';
 import SaveIcon from '@material-ui/icons/Save';
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 import MenuIcon from '@mui/icons-material/Menu';
 import axios from 'axios';
 import colors from '../constants/colors';
+import { request_url } from '../constants/config';
 
 mapboxgl.accessToken =
     'pk.eyJ1Ijoibmlsc21oIiwiYSI6ImNreXExZDdkMjBmY2Uyb28zdWVycHF3MGkifQ.3NulJNKdg77Kj-o0FllTOA';
 
+const user_request = request_url.url.API_URL_USER; //localhost:8000/user
+const path_geom_request = request_url.url.API_URL_PATH_GEOM; //localhost:8000/path_geom
+const intersect_request = request_url.url.API_URL_INTERSECT; //localhost:8000/intersect
+
 export default function MapView() {
     const mapContainer = useRef(null);
     const [map, setMap] = useState(null);
-    const [lng, setLng] = useState(10.421906);
-    const [lat, setLat] = useState(63.446827);
+    const [lng, setLng] = useState(10.390630736614895);
+    const [lat, setLat] = useState(63.43230311853981);
     const [zoom, setZoom] = useState(12);
     const [finalPath, setFinalPath] = useState([]);
     const [path, setPath] = useState(turf.featureCollection([]));
@@ -49,7 +53,9 @@ export default function MapView() {
     const [routeName, setRouteName] = useState('');
     const [routeType, setRouteType] = useState('walking');
     const [ownRouteNames, setOwnRouteNames] = useState([]);
-    const [intersectRoute, setIntersectRoute] = useState([]);
+    const [intersectRoute, setIntersectRoute] = useState(turf.featureCollection([]));
+    const [intersectRouteName, setIntersectRouteName] = useState('');
+    const [alert, setAlert] = useState(false);
 
     useEffect(() => {
         const attachMap = () => {
@@ -64,12 +70,54 @@ export default function MapView() {
             });
             setMap(mapInit);
         };
-
         const fillMap = () => {
             if (!mapContainer.current) {
                 return;
             }
             map.on('load', async () => {
+                map.loadImage(
+                    'https://docs.mapbox.com/mapbox-gl-js/assets/custom_marker.png',
+                    (error, image) => {
+                        if (error) throw error;
+                        map.addImage('home-marker', image);
+                        // Add a GeoJSON source with 2 points
+                        map.addSource('point-home', {
+                            type: 'geojson',
+                            data: {
+                                type: 'FeatureCollection',
+                                features: [
+                                    {
+                                        // feature for Mapbox DC
+                                        type: 'Feature',
+                                        geometry: {
+                                            type: 'Point',
+                                            coordinates: [lng, lat],
+                                        },
+                                        properties: {
+                                            title: 'Home',
+                                        },
+                                    },
+                                ],
+                            },
+                        });
+
+                        // Add a symbol layer
+                        map.addLayer({
+                            id: 'point-home',
+                            type: 'symbol',
+                            source: 'point-home',
+                            layout: {
+                                'icon-image': 'home-marker',
+                                'icon-size': 0.7,
+                                // get the title name from the source's "title" property
+                                'text-field': ['get', 'title'],
+                                'text-font': ['Open Sans Semibold', 'Arial Unicode MS Bold'],
+                                'text-offset': [0, 1.25],
+                                'text-anchor': 'top',
+                            },
+                        });
+                    },
+                );
                 map.addLayer({
                     id: 'point-symbol',
                     type: 'circle',
@@ -118,6 +166,24 @@ export default function MapView() {
                         'line-width': ['interpolate', ['linear'], ['zoom'], 12, 3, 22, 12],
                     },
                 });
+                map.addSource('route_intersect', {
+                    type: 'geojson',
+                    data: [],
+                });
+
+                map.addLayer({
+                    id: 'route_intersect',
+                    type: 'line',
+                    source: 'route_intersect',
+                    layout: {
+                        'line-join': 'round',
+                        'line-cap': 'round',
+                    },
+                    paint: {
+                        'line-color': ['get', 'color'],
+                        'line-width': ['interpolate', ['linear'], ['zoom'], 12, 3, 22, 12],
+                    },
+                });
 
                 await map.on('click', addPoints);
             });
@@ -129,7 +195,7 @@ export default function MapView() {
 
     useEffect(async () => {
         await axios
-            .get('http://localhost:8000/path_geom')
+            .get(path_geom_request)
             .then(function (response) {
                 let owned_path = response.data.features.filter(
                     (path) => path.properties.userid === sessionStorage.getItem('id'),
@@ -141,9 +207,7 @@ export default function MapView() {
             .catch((error) => {
                 console.log(error);
             });
-        console.log(ownRoutes);
         for (let i = 0; i <= ownRoutes.features.length; i++) {
-            console.log(ownRoutes.features[i].properties.name);
             ownRouteNames.push(ownRoutes.features[i].properties.name);
         }
     }, []);
@@ -151,6 +215,33 @@ export default function MapView() {
     const displayOwnRoutes = () => {
         clearPath();
         map.getSource('route_own').setData(ownRoutes);
+    };
+
+    const fetchIntersectRoutes = async (route_name) => {
+        clearPath();
+        await axios
+            .get(intersect_request, {
+                params: { route: route_name },
+            })
+            .then(function (response) {
+                for (let i = 0; i <= response.data.length - 1; i++) {
+                    intersectRoute.features.push(response.data[i][2].features[0]);
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+        displayIntersectRoutes();
+    };
+
+    const displayIntersectRoutes = () => {
+        if (intersectRoute.features.length > 1) {
+            map.getSource('route_intersect').setData(intersectRoute);
+            let center = turf.center(intersectRoute.features[0].geometry);
+            map.flyTo({ center: [center.geometry.coordinates[0], center.geometry.coordinates[1]], zoom: 13 });
+        } else {
+            setAlert(true);
+        }
     };
 
     const addPoints = async (event) => {
@@ -166,7 +257,6 @@ export default function MapView() {
     const generateRoute = async () => {
         const query = await fetch(queryURL(), { method: 'GET' });
         const response = await query.json();
-        console.log(response);
 
         if (response.code !== 'Ok') {
             const handleMessage =
@@ -200,7 +290,7 @@ export default function MapView() {
     const savePath = () => {
         length = turf.length(finalPath, 'kilometers');
         const coordinates = finalPath.features[0].geometry;
-        axios.post('http://localhost:8000/path_geom', {
+        axios.post(path_geom_request, {
             userid: sessionStorage.getItem('id'),
             geom: coordinates,
             length: length,
@@ -214,15 +304,16 @@ export default function MapView() {
     const clearPath = () => {
         map.getSource('route_created').setData(turf.featureCollection([]));
         map.getSource('route_own').setData(turf.featureCollection([]));
+        map.getSource('route_intersect').setData(turf.featureCollection([]));
         map.getSource('point-symbol').setData(turf.featureCollection([]));
         while (path.features.length) {
             path.features.pop();
         }
-        while (ownRoutes.features.length) {
-            ownRoutes.features.pop();
-        }
         while (createdRoute.features.length) {
             createdRoute.features.pop();
+        }
+        while (intersectRoute.features.length) {
+            intersectRoute.features.pop();
         }
     };
 
@@ -247,6 +338,10 @@ export default function MapView() {
         setRouteType(event.target.value);
     };
 
+    const handleSetIntersectRouteName = (event) => {
+        fetchIntersectRoutes(event.target.value);
+    };
+
     return (
         <Box width={1} style={{ paddingTop: '30px' }}>
             <div
@@ -257,6 +352,7 @@ export default function MapView() {
                     display: 'flex',
                     justifyContent: 'center',
                 }}
+                onClick={() => setAlert(false)}
             >
                 <Box
                     ref={mapContainer}
@@ -330,51 +426,23 @@ export default function MapView() {
                                         <Typography sx={{ p: 2 }}>
                                             Get routes which intersects with your route
                                         </Typography>
-
-                                        <TextField
-                                            id="outlined-select-currency"
-                                            select
-                                            label="Route"
-                                            sx={{ width: '30%', ml: 2, mr: 2, mb: 2 }}
-                                            size="small"
-                                            value={ownRouteNames[0]}
-                                            // onChange={}
+                                        <FormControl
+                                            sx={{ width: '30%', height: '30%', ml: 2, mr: 2, mb: 2 }}
                                         >
-                                            {ownRouteNames.map((name) => (
-                                                <MenuItem key={name}>{name}</MenuItem>
-                                            ))}
-                                        </TextField>
-                                    </Grid>
-                                    <Divider />
-                                    <Grid
-                                        sx={{
-                                            '&:hover': {
-                                                background: '#E0E0E0',
-                                                cursor: 'pointer',
-                                            },
-                                        }}
-                                    >
-                                        <Typography sx={{ p: 2 }}>
-                                            Get routes which is within the given radius of your route
-                                        </Typography>
-                                        <TextField
-                                            id="outlined-select-currency"
-                                            select
-                                            label="Route"
-                                            sx={{ width: '30%', ml: 2, mr: 2, mb: 2 }}
-                                            size="small"
-                                            // value={}
-                                            // onChange={}
-                                        />
-                                        <TextField
-                                            id="outlined-select-currency"
-                                            select
-                                            label="Radius"
-                                            sx={{ width: '30%', mr: 2, mb: 2 }}
-                                            size="small"
-                                            // value={}
-                                            // onChange={}
-                                        />
+                                            <InputLabel>Route</InputLabel>
+                                            <Select
+                                                autoFocus
+                                                value={intersectRouteName}
+                                                onChange={handleSetIntersectRouteName}
+                                                label="route"
+                                            >
+                                                {ownRouteNames.map((name) => (
+                                                    <MenuItem key={name} value={name}>
+                                                        {name}
+                                                    </MenuItem>
+                                                ))}
+                                            </Select>
+                                        </FormControl>
                                     </Grid>
                                 </Popover>
                             </IconButton>
@@ -392,7 +460,6 @@ export default function MapView() {
                                 style={{
                                     color: 'green',
                                     zIndex: 1,
-                                    //margin: 2,
                                 }}
                                 onClick={handleClickOpenDialog}
                             >
@@ -403,7 +470,6 @@ export default function MapView() {
                                 style={{
                                     color: 'red',
                                     zIndex: 1,
-                                    //margin: 2,
                                 }}
                                 onClick={() => clearPath()}
                             >
@@ -451,6 +517,13 @@ export default function MapView() {
                         </Grid>
                     </Grid>
                 </Box>
+            </div>
+            <div styles={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                {alert ? (
+                    <Alert severity="info">There are no routes which intersect with your route!</Alert>
+                ) : (
+                    <></>
+                )}
             </div>
         </Box>
     );
