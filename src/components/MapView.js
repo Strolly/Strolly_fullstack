@@ -33,7 +33,6 @@ import { request_url } from '../constants/config';
 mapboxgl.accessToken =
     'pk.eyJ1Ijoibmlsc21oIiwiYSI6ImNreXExZDdkMjBmY2Uyb28zdWVycHF3MGkifQ.3NulJNKdg77Kj-o0FllTOA';
 
-const user_request = request_url.url.API_URL_USER; //localhost:8000/user
 const path_geom_request = request_url.url.API_URL_PATH_GEOM; //localhost:8000/path_geom
 const intersect_request = request_url.url.API_URL_INTERSECT; //localhost:8000/intersect
 
@@ -343,7 +342,7 @@ export default function MapView() {
     };
 
     return (
-        <Box width={1} style={{ paddingTop: '30px' }}>
+        <Box width={1} style={{ paddingTop: '30px', marginBottom: '60px' }}>
             <div
                 id="comparison-container"
                 style={{
@@ -426,15 +425,14 @@ export default function MapView() {
                                         <Typography sx={{ p: 2 }}>
                                             Get routes which intersects with your route
                                         </Typography>
-                                        <FormControl
-                                            sx={{ width: '30%', height: '30%', ml: 2, mr: 2, mb: 2 }}
-                                        >
+                                        <FormControl sx={{ width: '30%', ml: 2, mr: 2, mb: 2 }}>
                                             <InputLabel>Route</InputLabel>
                                             <Select
                                                 autoFocus
                                                 value={intersectRouteName}
                                                 onChange={handleSetIntersectRouteName}
                                                 label="route"
+                                                sx={{ height: '40px' }}
                                             >
                                                 {ownRouteNames.map((name) => (
                                                     <MenuItem key={name} value={name}>
@@ -518,7 +516,13 @@ export default function MapView() {
                     </Grid>
                 </Box>
             </div>
-            <div styles={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <div
+                styles={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                }}
+            >
                 {alert ? (
                     <Alert severity="info">There are no routes which intersect with your route!</Alert>
                 ) : (

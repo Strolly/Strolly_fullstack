@@ -15,15 +15,15 @@ const item: SxProps<Theme> = {
 };
 
 const number = {
-    fontSize: 24,
+    fontSize: 30,
     fontFamily: 'default',
-    color: '#0083DB',
+    color: '#C7FDFF',
     fontWeight: 'medium',
 };
 
 function ProductHowItWorks() {
     return (
-        <Box component="section" sx={{ display: 'flex', bgcolor: 'secondary.light', overflow: 'hidden' }}>
+        <Box component="section" sx={{ display: 'flex', bgcolor: '#00B1B8', overflow: 'hidden' }}>
             <Container
                 sx={{
                     mt: 10,
@@ -45,7 +45,7 @@ function ProductHowItWorks() {
                         opacity: 0.7,
                     }}
                 />
-                <Typography variant="h4" component="h2" sx={{ mb: 14 }}>
+                <Typography variant="h4" component="h2" sx={{ mb: 14, color: 'white' }}>
                     How it works
                 </Typography>
                 <div>
@@ -53,43 +53,26 @@ function ProductHowItWorks() {
                         <Grid item xs={12} md={4}>
                             <Box sx={item}>
                                 <Box sx={number}>1.</Box>
-                                {/* <Box
-                                    component="img"
-                                    src="/static/themes/onepirate/productHowItWorks1.svg"
-                                    alt="suitcase"
-                                    sx={image}
-                                /> */}
-                                <Typography variant="h5" align="center">
-                                    Add your favorite route. You can share you route with other users if you
-                                    want to.
+                                <Typography variant="h5" align="center" sx={{ color: 'white' }}>
+                                    Add your favorite route by clicking on the map to add points. A route will
+                                    automatically be generated between the points.
                                 </Typography>
                             </Box>
                         </Grid>
                         <Grid item xs={12} md={4}>
                             <Box sx={item}>
                                 <Box sx={number}>2.</Box>
-                                {/* <Box
-                                    component="img"
-                                    src="/static/themes/onepirate/productHowItWorks2.svg"
-                                    alt="graph"
-                                    sx={image}
-                                /> */}
-                                <Typography variant="h5" align="center">
-                                    Take a look at others favorite routes and get inspired.
+                                <Typography variant="h5" align="center" sx={{ color: 'white' }}>
+                                    View all your saved routes.
                                 </Typography>
                             </Box>
                         </Grid>
                         <Grid item xs={12} md={4}>
                             <Box sx={item}>
                                 <Box sx={number}>3.</Box>
-                                {/* <Box
-                                    component="img"
-                                    src="/static/themes/onepirate/productHowItWorks3.svg"
-                                    alt="clock"
-                                    sx={image}
-                                /> */}
-                                <Typography variant="h5" align="center">
-                                    Ask others to join you on a stroll.
+                                <Typography variant="h5" align="center" sx={{ color: 'white' }}>
+                                    You can see all the routes which intersect on of your route to get
+                                    inspired to try out new routes.
                                 </Typography>
                             </Box>
                         </Grid>

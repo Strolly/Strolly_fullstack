@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import { styled } from '@mui/material/styles';
 import MuiToolbar from '@mui/material/Toolbar';
+import Divider from '@mui/material/Divider';
 import MenuButton from './MenuButton';
 import StrollerIcon from '@mui/icons-material/Stroller';
 import { IconButton } from '@mui/material';
@@ -37,24 +38,17 @@ function AppBar(props: AppBarProps) {
     });
     return (
         <div>
-            <MuiAppBar elevation={0} position="fixed" sx={{ backgroundColor: '#0083DB' }} {...props}>
+            <MuiAppBar elevation={0} position="fixed" sx={{ backgroundColor: '#00B1B8' }} {...props}>
                 <Toolbar sx={{ justifyContent: 'center', alignItems: 'center' }}>
                     <Box sx={{ flex: 1 }}></Box>
 
-                    <Link
-                        //onClick={() => navigate('/')}
-                        href="/"
-                        variant="h6"
-                        underline="none"
-                        color="inherit"
-                        sx={{ fontSize: 30 }}
-                    >
+                    <Link href="/" variant="h6" underline="none" color="#C7FDFF" sx={{ fontSize: 30 }}>
                         <IconButton sx={{ backgroundColor: 'transparent', pb: 1.5 }} onClick={() => {}}>
-                            <StrollerIcon />
+                            <StrollerIcon sx={{ color: '#C7FDFF' }} />
                         </IconButton>
                         {'Strolly'}
                         <IconButton sx={{ backgroundColor: 'transparent', pb: 1.5 }}>
-                            <StrollerIcon />
+                            <StrollerIcon sx={{ color: '#C7FDFF' }} />
                         </IconButton>
                     </Link>
 
@@ -65,6 +59,7 @@ function AppBar(props: AppBarProps) {
                         </div>
                     </Box>
                 </Toolbar>
+                <Divider />
             </MuiAppBar>
             <Toolbar />
         </div>

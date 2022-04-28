@@ -59,12 +59,12 @@ function ProtectedHome() {
         <React.Fragment>
             <AppBar />
             {!isAuth ? (
-                <Box width={1} sx={{ bgcolor: 'secondary.light', pt: '30px' }}>
+                <Box width={1} sx={{ bgcolor: '#C7FDFF', pt: '30px' }}>
                     <div
                         id="comparison-container"
                         style={{
                             position: 'relative',
-                            height: '80vh',
+                            height: '90vh',
                             display: 'flex',
                             justifyContent: 'center',
                         }}
@@ -86,7 +86,7 @@ function ProtectedHome() {
                     </div>
                 </Box>
             ) : (
-                <Box sx={{ bgcolor: 'secondary.light' }}>
+                <Box sx={{ bgcolor: '#C7FDFF' }}>
                     <MapView />
                     <HowItWorks />
                 </Box>
