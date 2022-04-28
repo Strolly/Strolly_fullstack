@@ -79,12 +79,14 @@ export default function MapView() {
                     (error, image) => {
                         if (error) throw error;
                         map.addImage('home-marker', image);
+                        // Add a GeoJSON source with 2 points
                         map.addSource('point-home', {
                             type: 'geojson',
                             data: {
                                 type: 'FeatureCollection',
                                 features: [
                                     {
+                                        // feature for Mapbox DC
                                         type: 'Feature',
                                         geometry: {
                                             type: 'Point',
