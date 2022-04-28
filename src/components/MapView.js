@@ -79,14 +79,12 @@ export default function MapView() {
                     (error, image) => {
                         if (error) throw error;
                         map.addImage('home-marker', image);
-                        // Add a GeoJSON source with 2 points
                         map.addSource('point-home', {
                             type: 'geojson',
                             data: {
                                 type: 'FeatureCollection',
                                 features: [
                                     {
-                                        // feature for Mapbox DC
                                         type: 'Feature',
                                         geometry: {
                                             type: 'Point',
@@ -182,6 +180,52 @@ export default function MapView() {
                         'line-color': ['get', 'color'],
                         'line-width': ['interpolate', ['linear'], ['zoom'], 12, 3, 22, 12],
                     },
+                });
+                const popup = new mapboxgl.Popup({
+                    closeButton: false,
+                    closeOnClick: false,
+                });
+                map.on('mouseenter', 'route_own', (e) => {
+                    const coordinates = e.lngLat.wrap();
+                    const name = e.features[0].properties.name;
+                    const length = e.features[0].properties.length;
+                    const type = e.features[0].properties.type;
+                    const popupContent =
+                        'Name: ' +
+                        name +
+                        '<br />' +
+                        'Type: ' +
+                        type +
+                        '<br />' +
+                        'Length: ' +
+                        (Math.round(length * 100) / 100).toFixed(2) +
+                        ' km';
+                    popup.setLngLat(coordinates).setHTML(popupContent).addTo(map);
+                });
+
+                map.on('mouseleave', 'route_own', () => {
+                    popup.remove();
+                });
+                map.on('mouseenter', 'route_intersect', (e) => {
+                    const coordinates = e.lngLat.wrap();
+                    const name = e.features[0].properties.name;
+                    const length = e.features[0].properties.length;
+                    const type = e.features[0].properties.type;
+                    const popupContent =
+                        'Name: ' +
+                        name +
+                        '<br />' +
+                        'Type: ' +
+                        type +
+                        '<br />' +
+                        'Length: ' +
+                        (Math.round(length * 100) / 100).toFixed(2) +
+                        ' km';
+                    popup.setLngLat(coordinates).setHTML(popupContent).addTo(map);
+                });
+
+                map.on('mouseleave', 'route_intersect', () => {
+                    popup.remove();
                 });
 
                 await map.on('click', addPoints);
