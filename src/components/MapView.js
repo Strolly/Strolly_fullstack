@@ -181,6 +181,7 @@ export default function MapView() {
                         'line-width': ['interpolate', ['linear'], ['zoom'], 12, 3, 22, 12],
                     },
                 });
+
                 const popup = new mapboxgl.Popup({
                     closeButton: false,
                     closeOnClick: false,
