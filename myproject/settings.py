@@ -188,7 +188,10 @@ SOCIAL_AUTH_FACEBOOK_SECRET = '3d6191526537b18b63a6cb3109915c6a'  # App Secret
 #SOCIAL_AUTH_FACEBOOK_KEY: '618576985900653'   # App ID
 #SOCIAL_AUTH_FACEBOOK_SECRET = '54b747c274544c888634fa8c4b7013f9'  # App Secret
 
-django_heroku.settings(locals())
+OAUTH2_PROVIDER_ACCESS_TOKEN_MODEL = "oauth2_provider.AccessToken" 
+OAUTH2_PROVIDER_APPLICATION_MODEL = "oauth2_provider.Application" 
+OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL = "oauth2_provider.RefreshToken" 
+OAUTH2_PROVIDER_ID_TOKEN_MODEL = "oauth2_provider.IDToken"                                                                  
 
 try:
     from .local_settings import *
