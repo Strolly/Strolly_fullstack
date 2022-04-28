@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 
-import mapboxgl from 'mapbox-gl';
+import mapboxgl from '!mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import * as turf from '@turf/turf';
 import {
