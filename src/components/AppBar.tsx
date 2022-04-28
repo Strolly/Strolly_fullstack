@@ -43,7 +43,7 @@ function AppBar(props: AppBarProps) {
                     <Box sx={{ flex: 1 }}></Box>
 
                     <Link href="/" variant="h6" underline="none" color="#C7FDFF" sx={{ fontSize: 30 }}>
-                        <IconButton sx={{ backgroundColor: 'transparent', pb: 1.5 }}>
+                        <IconButton sx={{ backgroundColor: 'transparent', pb: 1.5 }} onClick={() => {}}>
                             <StrollerIcon sx={{ color: '#C7FDFF' }} />
                         </IconButton>
                         {'Strolly'}

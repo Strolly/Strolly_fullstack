@@ -93,9 +93,6 @@ REST_FRAMEWORK = {
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',  # django-oauth-toolkit >= 1.0.0
         'drf_social_oauth2.authentication.SocialAuthentication',
     ),
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.AllowAny',
-    ]
 }
 
 AUTHENTICATION_BACKENDS = (
@@ -163,7 +160,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'build/static')
@@ -187,12 +184,6 @@ SOCIAL_AUTH_FACEBOOK_SECRET = '3d6191526537b18b63a6cb3109915c6a'  # App Secret
 
 #SOCIAL_AUTH_FACEBOOK_KEY: '618576985900653'   # App ID
 #SOCIAL_AUTH_FACEBOOK_SECRET = '54b747c274544c888634fa8c4b7013f9'  # App Secret
-
-OAUTH2_PROVIDER_ACCESS_TOKEN_MODEL = "oauth2_provider.AccessToken" 
-OAUTH2_PROVIDER_APPLICATION_MODEL = "oauth2_provider.Application" 
-OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL = "oauth2_provider.RefreshToken" 
-OAUTH2_PROVIDER_ID_TOKEN_MODEL = "oauth2_provider.IDToken"                                                                  
-
 try:
     from .local_settings import *
 except ImportError:
