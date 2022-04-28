@@ -11,4 +11,3 @@ django-oauth-toolkit
 drf-social-oauth2
 django_filter
 djangorestframework-gis
-gdal
