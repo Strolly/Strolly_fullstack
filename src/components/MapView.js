@@ -191,6 +191,7 @@ export default function MapView() {
                 map.on('mouseenter', 'route_own', (e) => {
                     const coordinates = e.lngLat.wrap();
                     const name = e.features[0].properties.name;
+                    console.log(name);
                     const length = e.features[0].properties.length;
                     const type = e.features[0].properties.type;
                     const popupContent =
@@ -239,28 +240,42 @@ export default function MapView() {
         map && fillMap(mapContainer);
     }, [map]);
 
-    useEffect(async () => {
+    useEffect(() => {
+        fetchOwnRoute();
+    }, []);
+
+    useEffect(() => {
+        if ((ownRoutes.features.length > 0) & !!ownRoutes.features[0]) {
+            // for (let i = 0; i < ownRoutes.features.length; i++) {
+            //     ownRouteNames.push(ownRoutes.features[i].properties.name);
+            // }
+            if (!!map.getSource('route_own')) {
+                map.getSource('route_own').setData(ownRoutes);
+            }
+        }
+    }, [ownRoutes]);
+
+    const fetchOwnRoute = async () => {
+        clearPath();
         await axios
             .get(path_geom_request)
             .then(function (response) {
                 let owned_path = response.data.features.filter(
                     (path) => path.properties.userid === sessionStorage.getItem('id'),
                 );
-                for (let i = 0; i <= owned_path.length - 1; i++) {
-                    ownRoutes.features.push(owned_path[i]);
-                }
+                console.log('owned_path', owned_path);
+                setOwnRoutes((prevState) => ({
+                    ...prevState,
+                    features: [...owned_path],
+                }));
+                console.log(owned_path);
+                // for (let i = 0; i <= owned_path.length - 1; i++) {
+                //     ownRoutes.features.push(owned_path[i]);
+                // }
             })
             .catch((error) => {
                 console.log(error);
             });
-        for (let i = 0; i <= ownRoutes.features.length; i++) {
-            ownRouteNames.push(ownRoutes.features[i].properties.name);
-        }
-    }, []);
-
-    const displayOwnRoutes = () => {
-        clearPath();
-        map.getSource('route_own').setData(ownRoutes);
     };
 
     const fetchIntersectRoutes = async (route_name) => {
@@ -271,6 +286,7 @@ export default function MapView() {
             })
             .then(function (response) {
                 for (let i = 0; i <= response.data.length - 1; i++) {
+                    console.log(response.data);
                     intersectRoute.features.push(response.data[i][2].features[0]);
                 }
             })
@@ -288,6 +304,22 @@ export default function MapView() {
         } else {
             setAlert(true);
         }
+    };
+
+    const getRouteNames = () => {
+        console.log(ownRoutes);
+        console.log();
+        setOwnRouteNames((prevState) => [
+            ...prevState,
+            ownRoutes.features.map((prop, i) => {
+                console.log(prop.properties.name);
+                return prop.properties.name;
+            }),
+        ]);
+    };
+
+    const testRouteName = () => {
+        console.log(ownRouteNames);
     };
 
     const addPoints = async (event) => {
@@ -334,7 +366,7 @@ export default function MapView() {
     };
 
     const savePath = () => {
-        length = turf.length(finalPath, 'kilometers');
+        const length = turf.length(finalPath, 'kilometers');
         const coordinates = finalPath.features[0].geometry;
         axios.post(path_geom_request, {
             userid: sessionStorage.getItem('id'),
@@ -364,6 +396,7 @@ export default function MapView() {
     };
 
     const handleClickPopover = (event) => {
+        getRouteNames();
         setAnchorEl(event.currentTarget);
         setOpenPopover(!openPopover);
     };
@@ -456,7 +489,7 @@ export default function MapView() {
                                                 cursor: 'pointer',
                                             },
                                         }}
-                                        onClick={displayOwnRoutes}
+                                        onClick={fetchOwnRoute}
                                     >
                                         <Typography sx={{ p: 2 }}>Get your saved routes</Typography>
                                     </Grid>
@@ -480,8 +513,9 @@ export default function MapView() {
                                                 onChange={handleSetIntersectRouteName}
                                                 label="route"
                                                 sx={{ height: '40px' }}
+                                                onClick={testRouteName}
                                             >
-                                                {ownRouteNames.map((name) => (
+                                                {ownRouteNames[0]?.map((name) => (
                                                     <MenuItem key={name} value={name}>
                                                         {name}
                                                     </MenuItem>

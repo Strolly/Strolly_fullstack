@@ -18,11 +18,12 @@ class UserViewset(viewsets.ModelViewSet):
     filter_fields = ['id']
 
 class Path_geomViewset(viewsets.ModelViewSet):
-    queryset=Path_geom.objects.all()
+    
     serializer_class = Path_geomSerializer
 
     def list(self, request, *args, **kwargs):
-        serializer = Path_geomSerializer(self.queryset, many=True)
+        queryset=Path_geom.objects.all()
+        serializer = Path_geomSerializer(queryset, many=True)
         return Response(serializer.data)
         
 
