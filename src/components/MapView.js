@@ -191,7 +191,6 @@ export default function MapView() {
                 map.on('mouseenter', 'route_own', (e) => {
                     const coordinates = e.lngLat.wrap();
                     const name = e.features[0].properties.name;
-                    console.log(name);
                     const length = e.features[0].properties.length;
                     const type = e.features[0].properties.type;
                     const popupContent =
@@ -246,9 +245,6 @@ export default function MapView() {
 
     useEffect(() => {
         if ((ownRoutes.features.length > 0) & !!ownRoutes.features[0]) {
-            // for (let i = 0; i < ownRoutes.features.length; i++) {
-            //     ownRouteNames.push(ownRoutes.features[i].properties.name);
-            // }
             if (!!map.getSource('route_own')) {
                 map.getSource('route_own').setData(ownRoutes);
             }
@@ -256,26 +252,21 @@ export default function MapView() {
     }, [ownRoutes]);
 
     const fetchOwnRoute = async () => {
-        clearPath();
         await axios
             .get(path_geom_request)
             .then(function (response) {
                 let owned_path = response.data.features.filter(
                     (path) => path.properties.userid === sessionStorage.getItem('id'),
                 );
-                console.log('owned_path', owned_path);
                 setOwnRoutes((prevState) => ({
                     ...prevState,
                     features: [...owned_path],
                 }));
-                console.log(owned_path);
-                // for (let i = 0; i <= owned_path.length - 1; i++) {
-                //     ownRoutes.features.push(owned_path[i]);
-                // }
             })
             .catch((error) => {
                 console.log(error);
             });
+        clearPath();
     };
 
     const fetchIntersectRoutes = async (route_name) => {
@@ -286,13 +277,14 @@ export default function MapView() {
             })
             .then(function (response) {
                 for (let i = 0; i <= response.data.length - 1; i++) {
-                    console.log(response.data);
+                    console.log(response.data[i][2].features[0]);
                     intersectRoute.features.push(response.data[i][2].features[0]);
                 }
             })
             .catch((error) => {
                 console.log(error);
             });
+
         displayIntersectRoutes();
     };
 
@@ -307,20 +299,18 @@ export default function MapView() {
     };
 
     const getRouteNames = () => {
-        console.log(ownRoutes);
-        console.log();
-        setOwnRouteNames((prevState) => [
-            ...prevState,
-            ownRoutes.features.map((prop, i) => {
-                console.log(prop.properties.name);
-                return prop.properties.name;
-            }),
-        ]);
+        let names = [];
+        if (ownRoutes.features.length > 0) {
+            for (let i = 0; i < ownRoutes.features.length; i++) {
+                names.push(ownRoutes.features[i].properties.name);
+            }
+            setOwnRouteNames(names);
+        }
     };
 
-    const testRouteName = () => {
-        console.log(ownRouteNames);
-    };
+    // const testRouteName = () => {
+    //     console.log(ownRouteNames);
+    // };
 
     const addPoints = async (event) => {
         const coordinates = map.unproject(event.point);
@@ -513,12 +503,9 @@ export default function MapView() {
                                                 onChange={handleSetIntersectRouteName}
                                                 label="route"
                                                 sx={{ height: '40px' }}
-                                                onClick={testRouteName}
                                             >
-                                                {ownRouteNames[0]?.map((name) => (
-                                                    <MenuItem key={name} value={name}>
-                                                        {name}
-                                                    </MenuItem>
+                                                {ownRouteNames?.map((name) => (
+                                                    <MenuItem value={name}>{name}</MenuItem>
                                                 ))}
                                             </Select>
                                         </FormControl>
