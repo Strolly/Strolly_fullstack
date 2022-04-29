@@ -24,6 +24,7 @@ class Path_geomViewset(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         serializer = Path_geomSerializer(self.queryset, many=True)
         return Response(serializer.data)
+        
 
     def create(self, request,format=None):
         serializer = Path_geomSerializer(data=request.data)
