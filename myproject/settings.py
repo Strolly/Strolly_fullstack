@@ -184,6 +184,23 @@ SOCIAL_AUTH_FACEBOOK_SECRET = '3d6191526537b18b63a6cb3109915c6a'  # App Secret
 
 #SOCIAL_AUTH_FACEBOOK_KEY: '618576985900653'   # App ID
 #SOCIAL_AUTH_FACEBOOK_SECRET = '54b747c274544c888634fa8c4b7013f9'  # App Secret
+
+OAUTH2_PROVIDER_ACCESS_TOKEN_MODEL = "oauth2_provider.AccessToken" 
+OAUTH2_PROVIDER_APPLICATION_MODEL = "oauth2_provider.Application" 
+OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL = "oauth2_provider.RefreshToken" 
+OAUTH2_PROVIDER_ID_TOKEN_MODEL = "oauth2_provider.IDToken"
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'd71t2jro395fgd',
+        'USER': 'hgznrjhzzmuzmu',
+        'PASSWORD': '4a2c47c6bcc7dc4f0b037a18244d87711521f59467c14e6904516b051416c7dd',
+        'HOST': 'ec2-34-194-73-236.compute-1.amazonaws.com',
+        'PORT':  '5432',
+    }
+}
+
 try:
     from .local_settings import *
 except ImportError:
