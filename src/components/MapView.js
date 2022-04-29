@@ -599,4 +599,4 @@ export default function MapView() {
             </div>
         </Box>
     );
-}
+} //hei
