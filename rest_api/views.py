@@ -39,7 +39,7 @@ class Intersected_pathsViewset(viewsets.ModelViewSet):
     def list(self, request, *args, **kwargs):
         route_name = request.query_params.get('route')
         cursor = connection.cursor()
-        sql_query = f"""select id, userid, json_build_object('type', 'FeatureCollection','features', json_agg(ST_AsGeoJSON(rest_api_path_geom.*)::json)), length, type, name, color from rest_api_path_geom as rest_api_path_geom(id, userid, geom, length, type, name, color) where ST_Intersects((select rest_api_path_geom.geom::geometry from rest_api_path_geom where rest_api_path_geom.name = '{route_name}'), rest_api_path_geom.geom::geometry) group by id"""
+        sql_query = f"""select id, userid, json_build_object('type', 'FeatureCollection','features', json_agg(ST_AsGeoJSON(rest_api_path_geom.*)::json)), length, type, name, color from rest_api_path_geom as rest_api_path_geom(id, userid, geom, length, type, color, name) where ST_Intersects((select rest_api_path_geom.geom::geometry from rest_api_path_geom where rest_api_path_geom.name = '{route_name}'), rest_api_path_geom.geom::geometry) group by id"""
         cursor.execute(sql_query)
         response = cursor.fetchall()
         return Response(response)
