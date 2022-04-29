@@ -200,6 +200,7 @@ OAUTH2_PROVIDER_ID_TOKEN_MODEL = "oauth2_provider.IDToken"
 #         'PORT':  '5432',
 #     }
 # }
+#
 
 try:
     from .local_settings import *
