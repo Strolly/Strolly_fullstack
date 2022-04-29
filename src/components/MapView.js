@@ -240,12 +240,39 @@ export default function MapView() {
     }, [map]);
 
     useEffect(async () => {
+        console.log('hei');
+        fetchOwnRoute();
+    }, []);
+
+    useEffect(() => {
+        console.log('useffect:', ownRoutes);
+        console.log(!!ownRoutes.features[0]);
+        if ((ownRoutes.features.length > 0) & !!ownRoutes.features[0]) {
+            for (let i = 0; i < ownRoutes.features.length; i++) {
+                ownRouteNames.push(ownRoutes.features[i].properties.name);
+            }
+            map.getSource('route_own').setData(ownRoutes);
+        }
+
+        // map.getSource('route_own').setData(ownRoutes);
+    }, [ownRoutes]);
+
+    const fetchOwnRoute = async () => {
+        // map.getSource('route_own').setData(turf.featureCollection([]));
+        // console.log(ownRoutes.features);
+        clearPath();
         await axios
             .get(path_geom_request)
             .then(function (response) {
                 let owned_path = response.data.features.filter(
                     (path) => path.properties.userid === sessionStorage.getItem('id'),
                 );
+                console.log('owned_path', owned_path);
+                setOwnRoutes((prevState) => ({
+                    ...prevState,
+                    features: [...owned_path],
+                }));
+                console.log(owned_path);
                 for (let i = 0; i <= owned_path.length - 1; i++) {
                     ownRoutes.features.push(owned_path[i]);
                 }
@@ -253,14 +280,9 @@ export default function MapView() {
             .catch((error) => {
                 console.log(error);
             });
-        for (let i = 0; i <= ownRoutes.features.length; i++) {
-            ownRouteNames.push(ownRoutes.features[i].properties.name);
-        }
-    }, []);
-
-    const displayOwnRoutes = () => {
-        clearPath();
-        map.getSource('route_own').setData(ownRoutes);
+        // for (let i = 0; i <= ownRoutes.features.length; i++) {
+        //     ownRouteNames.push(ownRoutes.features[i].properties.name);
+        // }
     };
 
     const fetchIntersectRoutes = async (route_name) => {
@@ -456,7 +478,7 @@ export default function MapView() {
                                                 cursor: 'pointer',
                                             },
                                         }}
-                                        onClick={displayOwnRoutes}
+                                        onClick={fetchOwnRoute}
                                     >
                                         <Typography sx={{ p: 2 }}>Get your saved routes</Typography>
                                     </Grid>
