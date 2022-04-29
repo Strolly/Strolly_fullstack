@@ -193,10 +193,10 @@ OAUTH2_PROVIDER_ID_TOKEN_MODEL = "oauth2_provider.IDToken"
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd71t2jro395fgd',
-        'USER': 'hgznrjhzzmuzmu',
-        'PASSWORD': '4a2c47c6bcc7dc4f0b037a18244d87711521f59467c14e6904516b051416c7dd',
-        'HOST': 'ec2-34-194-73-236.compute-1.amazonaws.com',
+        'NAME': 'd3brnokb2gemru',
+        'USER': 'vrvkbjmldtlbzc',
+        'PASSWORD': 'fb02dceaafda5ec2afbfaf79a7dd91c13e1f265fd2b021ae6b83b6a0b14cf927',
+        'HOST': 'ec2-35-168-194-15.compute-1.amazonaws.com',
         'PORT':  '5432',
     }
 }
