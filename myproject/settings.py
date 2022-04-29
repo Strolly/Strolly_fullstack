@@ -190,16 +190,16 @@ OAUTH2_PROVIDER_APPLICATION_MODEL = "oauth2_provider.Application"
 OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL = "oauth2_provider.RefreshToken" 
 OAUTH2_PROVIDER_ID_TOKEN_MODEL = "oauth2_provider.IDToken"
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'd3brnokb2gemru',
-        'USER': 'vrvkbjmldtlbzc',
-        'PASSWORD': 'fb02dceaafda5ec2afbfaf79a7dd91c13e1f265fd2b021ae6b83b6a0b14cf927',
-        'HOST': 'ec2-35-168-194-15.compute-1.amazonaws.com',
-        'PORT':  '5432',
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'd3brnokb2gemru',
+#         'USER': 'vrvkbjmldtlbzc',
+#         'PASSWORD': 'fb02dceaafda5ec2afbfaf79a7dd91c13e1f265fd2b021ae6b83b6a0b14cf927',
+#         'HOST': 'ec2-35-168-194-15.compute-1.amazonaws.com',
+#         'PORT':  '5432',
+#     }
+# }
 
 try:
     from .local_settings import *
