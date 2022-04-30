@@ -205,3 +205,19 @@ try:
     from .local_settings import *
 except ImportError:
     pass
+
+DATABASES = {
+    'default': {
+       'ENGINE': 'django.contrib.gis.db.backends.postgis', 
+        'NAME': 'gib2db',                      
+        'USER': 'erikskole',                     
+        'PASSWORD': 'slangetann1507',                  
+        'HOST': 'localhost',                      
+        'PORT': '',                      
+    }
+}
+
+SOCIAL_AUTH_FACEBOOK_KEY = '4890883034293415'  # App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = 'd08e539b4b8f72976b0faced7df50e8a'  # App Secret
+
+GEOS_LIBRARY_PATH = '/usr/local/Cellar/geos/3.10.2/lib/libgeos_c.1.dylib'
