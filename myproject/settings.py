@@ -71,7 +71,7 @@ ROOT_URLCONF = 'myproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'build')],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -202,11 +202,6 @@ OAUTH2_PROVIDER_ID_TOKEN_MODEL = "oauth2_provider.IDToken"
 # }
 #
 
-try:
-    from .local_settings import *
-except ImportError:
-    pass
-
 DATABASES = {
     'default': {
        'ENGINE': 'django.contrib.gis.db.backends.postgis', 
@@ -217,6 +212,13 @@ DATABASES = {
         'PORT': '8069',                      
     }
 }
+
+try:
+    from .local_settings import *
+except ImportError:
+    pass
+
+
 
 SOCIAL_AUTH_FACEBOOK_KEY = '4890883034293415'  # App ID
 SOCIAL_AUTH_FACEBOOK_SECRET = 'd08e539b4b8f72976b0faced7df50e8a'  # App Secret
