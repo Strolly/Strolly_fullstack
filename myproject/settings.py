@@ -212,7 +212,7 @@ DATABASES = {
         'NAME': 'gib2db',                      
         'USER': 'geomatikkstud4',                     
         'PASSWORD': 'geomatikkerkult4',                  
-        'HOST': '5432',                      
+        'HOST': '8069',                      
         'PORT': '',                      
     }
 }
