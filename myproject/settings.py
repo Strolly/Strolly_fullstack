@@ -213,7 +213,7 @@ DATABASES = {
         'USER': 'geomatikkstud4',                     
         'PASSWORD': 'geomatikkerkult4',                  
         'HOST': 'geomatikk.ibm.ntnu.no',                      
-        'PORT': '5432',                      
+        'PORT': '8069',                      
     }
 }
 
