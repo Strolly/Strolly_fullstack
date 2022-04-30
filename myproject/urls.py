@@ -26,5 +26,5 @@ urlpatterns = [
     path('auth/', include('drf_social_oauth2.urls', namespace='drf')),
     path('admin/', admin.site.urls),
     path('', include('rest_api.urls')),
-    re_path('.*',TemplateView.as_view(template_name='index.html')),    
+    #re_path('.*',TemplateView.as_view(template_name='index.html')),    
 ]
