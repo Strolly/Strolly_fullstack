@@ -210,9 +210,9 @@ DATABASES = {
     'default': {
        'ENGINE': 'django.contrib.gis.db.backends.postgis', 
         'NAME': 'gib2db',                      
-        'USER': 'erikskole',                     
-        'PASSWORD': 'slangetann1507',                  
-        'HOST': 'localhost',                      
+        'USER': 'geomatikkstud4',                     
+        'PASSWORD': 'geomatikkerkult4',                  
+        'HOST': '7662',                      
         'PORT': '',                      
     }
 }
