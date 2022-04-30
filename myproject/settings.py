@@ -209,11 +209,11 @@ except ImportError:
 DATABASES = {
     'default': {
        'ENGINE': 'django.contrib.gis.db.backends.postgis', 
-        'NAME': 'gib2db',                      
+        'NAME': 'Strolly',                      
         'USER': 'geomatikkstud4',                     
         'PASSWORD': 'geomatikkerkult4',                  
-        'HOST': '8069',                      
-        'PORT': '',                      
+        'HOST': 'geomatikk.ibm.ntnu.no',                      
+        'PORT': '5432',                      
     }
 }
 
