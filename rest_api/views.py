@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from rest_framework import viewsets
 from rest_framework.views import APIView
 from django_filters import rest_framework as filters
@@ -11,6 +12,9 @@ from .serializers import UserSerializer, Path_geomSerializer
 from django.contrib.gis.geos import GEOSGeometry
 from rest_framework import status
 from django.db import connection
+
+def api_home_view(request):
+    return HttpResponse("Api response")
 
 class UserViewset(viewsets.ModelViewSet):
     queryset=User.objects.all()

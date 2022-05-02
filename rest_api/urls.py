@@ -17,6 +17,7 @@ from django.views.generic import TemplateView
 
 
 urlpatterns = [
+    path('', views.api_home_view),
     path('user', views.UserViewset.as_view({'get': 'list'})),
     path('path_geom', views.Path_geomViewset.as_view({'post': 'create', 'get': 'list'})),
     path('intersect', views.Intersected_pathsViewset.as_view({'get': 'list'})),
