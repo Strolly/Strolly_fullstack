@@ -1,32 +1,61 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Django-React-App
+# name: Django-React-App
 
-# Controls when the action will run.
+# # Controls when the action will run.
+# on:
+#     # Triggers the workflow on push or pull request events but only for the main branch
+#     push:
+#         branches: main
+
+#     # Allows you to run this workflow manually from the Actions tab
+#     workflow_dispatch:
+
+# # A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# jobs:
+#     # This workflow contains a single job called "build"
+#     build:
+#         # The type of runner that the job will run on
+#         runs-on: ubuntu-latest
+
+#         # Steps represent a sequence of tasks that will be executed as part of the job
+#         steps:
+#             # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+#             - uses: actions/checkout@v2
+
+#             - name: Deploy
+#               uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+#               with:
+#                   heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+#                   heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
+#                   heroku_email: ${{secrets.EMAIL}}
+#                   dontautocreate: true
+
 on:
-    # Triggers the workflow on push or pull request events but only for the main branch
     push:
         branches: main
-
-    # Allows you to run this workflow manually from the Actions tab
-    workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+name: 🚀 Deploy website on push
 jobs:
-    # This workflow contains a single job called "build"
-    build:
-        # The type of runner that the job will run on
+    web-deploy:
+        name: 🎉 Deploy
         runs-on: ubuntu-latest
-
-        # Steps represent a sequence of tasks that will be executed as part of the job
         steps:
-            # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-            - uses: actions/checkout@v2
+            - name: 🚚 Get latest code
+              uses: actions/checkout@v2
 
-            - name: Deploy
-              uses: akhileshns/heroku-deploy@v3.12.12 # This is the action
+            - name: Use Node.js 14
+              uses: actions/setup-node@v2
               with:
-                  heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-                  heroku_app_name: ${{secrets.HEROKU_APP_NAME}}
-                  heroku_email: ${{secrets.EMAIL}}
-                  dontautocreate: true
+                  node-version: '14'
+
+            - name: 🔨 Build Project
+              run: |
+                  npm install
+                  npm run build
+
+            - name: 📂 Sync files
+              uses: SamKirkland/FTP-Deploy-Action@4.3.0
+              with:
+                  server: ftp.gib-2-project.com
+                  username: ${{ secrets.username }}
+                  password: ${{ secrets.password }}
