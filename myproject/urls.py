@@ -23,8 +23,8 @@ from django.views.generic import TemplateView
 # router = get_router()
 
 urlpatterns = [
+    path('', include('rest_api.urls')),
     path('auth/', include('drf_social_oauth2.urls', namespace='drf')),
     path('admin/', admin.site.urls),
-    path('', include('rest_api.urls')),
-    re_path('.*',TemplateView.as_view(template_name='index.html')),    
+    #re_path('.*',TemplateView.as_view(template_name='index.html')),    
 ]

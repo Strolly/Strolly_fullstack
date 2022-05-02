@@ -71,7 +71,7 @@ ROOT_URLCONF = 'myproject.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'build')],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -162,9 +162,12 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+#STATICFILES_DIRS = [os.path.join(BASE_DIR, 'build/static')]
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'build/static')
+    os.path.join(BASE_DIR, "static"),
+    '/var/www/static/',
 ]
+
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 django_heroku.settings(locals())
@@ -184,7 +187,41 @@ SOCIAL_AUTH_FACEBOOK_SECRET = '3d6191526537b18b63a6cb3109915c6a'  # App Secret
 
 #SOCIAL_AUTH_FACEBOOK_KEY: '618576985900653'   # App ID
 #SOCIAL_AUTH_FACEBOOK_SECRET = '54b747c274544c888634fa8c4b7013f9'  # App Secret
+
+OAUTH2_PROVIDER_ACCESS_TOKEN_MODEL = "oauth2_provider.AccessToken" 
+OAUTH2_PROVIDER_APPLICATION_MODEL = "oauth2_provider.Application" 
+OAUTH2_PROVIDER_REFRESH_TOKEN_MODEL = "oauth2_provider.RefreshToken" 
+OAUTH2_PROVIDER_ID_TOKEN_MODEL = "oauth2_provider.IDToken"
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql_psycopg2',
+#         'NAME': 'd3brnokb2gemru',
+#         'USER': 'vrvkbjmldtlbzc',
+#         'PASSWORD': 'fb02dceaafda5ec2afbfaf79a7dd91c13e1f265fd2b021ae6b83b6a0b14cf927',
+#         'HOST': 'ec2-35-168-194-15.compute-1.amazonaws.com',
+#         'PORT':  '5432',
+#     }
+# }
+#
+
+DATABASES = {
+    'default': {
+       'ENGINE': 'django.contrib.gis.db.backends.postgis', 
+        'NAME': 'Strolly',                      
+        'USER': 'geomatikkstud4',                     
+        'PASSWORD': 'geomatikkerkult4',                  
+        'HOST': 'geomatikk.ibm.ntnu.no',                      
+        'PORT': '8069',                      
+    }
+}
+
 try:
     from .local_settings import *
 except ImportError:
     pass
+
+
+
+SOCIAL_AUTH_FACEBOOK_KEY = '4890883034293415'  # App ID
+SOCIAL_AUTH_FACEBOOK_SECRET = 'd08e539b4b8f72976b0faced7df50e8a'  # App Secret

@@ -239,28 +239,34 @@ export default function MapView() {
         map && fillMap(mapContainer);
     }, [map]);
 
-    useEffect(async () => {
+    useEffect(() => {
+        fetchOwnRoute();
+    }, []);
+
+    useEffect(() => {
+        if ((ownRoutes.features.length > 0) & !!ownRoutes.features[0]) {
+            if (!!map.getSource('route_own')) {
+                map.getSource('route_own').setData(ownRoutes);
+            }
+        }
+    }, [ownRoutes]);
+
+    const fetchOwnRoute = async () => {
         await axios
             .get(path_geom_request)
             .then(function (response) {
                 let owned_path = response.data.features.filter(
                     (path) => path.properties.userid === sessionStorage.getItem('id'),
                 );
-                for (let i = 0; i <= owned_path.length - 1; i++) {
-                    ownRoutes.features.push(owned_path[i]);
-                }
+                setOwnRoutes((prevState) => ({
+                    ...prevState,
+                    features: [...owned_path],
+                }));
             })
             .catch((error) => {
                 console.log(error);
             });
-        for (let i = 0; i <= ownRoutes.features.length; i++) {
-            ownRouteNames.push(ownRoutes.features[i].properties.name);
-        }
-    }, []);
-
-    const displayOwnRoutes = () => {
         clearPath();
-        map.getSource('route_own').setData(ownRoutes);
     };
 
     const fetchIntersectRoutes = async (route_name) => {
@@ -271,12 +277,14 @@ export default function MapView() {
             })
             .then(function (response) {
                 for (let i = 0; i <= response.data.length - 1; i++) {
+                    console.log(response.data[i][2].features[0]);
                     intersectRoute.features.push(response.data[i][2].features[0]);
                 }
             })
             .catch((error) => {
                 console.log(error);
             });
+
         displayIntersectRoutes();
     };
 
@@ -289,6 +297,20 @@ export default function MapView() {
             setAlert(true);
         }
     };
+
+    const getRouteNames = () => {
+        let names = [];
+        if (ownRoutes.features.length > 0) {
+            for (let i = 0; i < ownRoutes.features.length; i++) {
+                names.push(ownRoutes.features[i].properties.name);
+            }
+            setOwnRouteNames(names);
+        }
+    };
+
+    // const testRouteName = () => {
+    //     console.log(ownRouteNames);
+    // };
 
     const addPoints = async (event) => {
         const coordinates = map.unproject(event.point);
@@ -334,7 +356,7 @@ export default function MapView() {
     };
 
     const savePath = () => {
-        length = turf.length(finalPath, 'kilometers');
+        const length = turf.length(finalPath, 'kilometers');
         const coordinates = finalPath.features[0].geometry;
         axios.post(path_geom_request, {
             userid: sessionStorage.getItem('id'),
@@ -364,6 +386,7 @@ export default function MapView() {
     };
 
     const handleClickPopover = (event) => {
+        getRouteNames();
         setAnchorEl(event.currentTarget);
         setOpenPopover(!openPopover);
     };
@@ -456,7 +479,7 @@ export default function MapView() {
                                                 cursor: 'pointer',
                                             },
                                         }}
-                                        onClick={displayOwnRoutes}
+                                        onClick={fetchOwnRoute}
                                     >
                                         <Typography sx={{ p: 2 }}>Get your saved routes</Typography>
                                     </Grid>
@@ -481,7 +504,7 @@ export default function MapView() {
                                                 label="route"
                                                 sx={{ height: '40px' }}
                                             >
-                                                {ownRouteNames.map((name) => (
+                                                {ownRouteNames?.map((name) => (
                                                     <MenuItem key={name} value={name}>
                                                         {name}
                                                     </MenuItem>
